@@ -1,0 +1,59 @@
+{% extends '../common/main.html' %}
+<!-- Divider -->
+{% block title %}Login | Plantipie{% endblock %}
+<!-- Divider -->
+{% block content %}
+<section class="container">
+  <form class="auth-form" action="/login" method="post">
+    {% csrf_token %}
+    <div>
+      <h4 class="mb-4">Create an account</h4>
+      <div class="form-group mb-3">
+        <label class="mb-1" for="email">Email address</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          id="email"
+          placeholder="Enter email"
+        />
+      </div>
+      <div class="form-group mb-3">
+        <label class="mb-1" for="firstname">First name</label>
+        <input
+          type="firstname"
+          name="firstname"
+          class="form-control"
+          id="firstname"
+          placeholder="Enter firstname"
+        />
+      </div>
+      <div class="form-group mb-3">
+        <label class="mb-1" for="lastname">Last name</label>
+        <input
+          type="lastname"
+          name="lastname"
+          class="form-control"
+          id="lastname"
+          placeholder="Enter lastname"
+        />
+      </div>
+      <div class="form-group mb-3">
+        <label class="mb-1" for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          id="password"
+          placeholder="Password"
+        />
+      </div>
+      <p class="text-muted">
+        Don't have an account ?
+        <a href="{% url 'signup' %}">Create an account</a>
+      </p>
+      <button type="submit" class="btn btn-theme">Login</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,111 @@
+.btn-theme {
+  background-color: $primary;
+  color: $white;
+  &:hover {
+    background-color: darken($primary, 10%);
+    color: $white;
+  }
+}
+
+.product {
+  color: inherit !important;
+  margin-bottom: 1.5rem;
+  border: 1px solid $border;
+  border-radius: 0.5rem;
+  display: block;
+  overflow: hidden;
+  .image {
+    position: relative;
+    padding-top: 80%;
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+    }
+  }
+  .info {
+    padding: 1rem;
+    .price {
+      @include flex($align: flex-end, $gap: 0.5rem);
+      margin-bottom: 0.5rem;
+      h5 {
+        margin-bottom: 0;
+        font-weight: 700;
+      }
+      span {
+        color: lighten($color: $fontColor, $amount: 30%);
+        position: relative;
+        font-size: 0.875rem;
+        text-decoration: line-through;
+      }
+    }
+    h6 {
+      margin-bottom: 1rem;
+    }
+    .other {
+      @include flex(space-between, center);
+      span {
+        font-size: 0.875rem;
+        height: 2rem;
+        line-height: 2rem;
+        &:first-child {
+          background-color: $yellow;
+          color: $white;
+          padding: 0 1rem;
+          border-radius: 5rem;
+        }
+        &:last-child {
+          background-color: $primary;
+          color: $white;
+          padding: 0 1rem;
+          border-radius: 5rem;
+          transition: background-color 0.15s ease-in-out;
+          &:hover {
+            background-color: darken($color: $primary, $amount: 10%);
+          }
+        }
+      }
+    }
+  }
+}
+
+.available {
+  color: $primary;
+}
+.unavailable {
+  color: $orange;
+}
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  border: 1px solid $border;
+  span {
+    &:first-child,
+    &:last-child {
+      height: 1.75rem;
+      width: 1.75rem;
+      line-height: 1.75rem;
+      text-align: center;
+      background-color: $background;
+      cursor: pointer;
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1111;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: $black, $alpha: 0.25);
+}

@@ -1,0 +1,45 @@
+@import '../variables', '../mixins';
+.banner {
+  position: relative;
+  height: 750px;
+  margin-bottom: 3rem;
+  img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+    z-index: -1;
+  }
+  .banner-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 800px;
+    text-align: center;
+    color: $white;
+    margin: 0 auto;
+    h2 {
+      word-spacing: 3px;
+      line-height: 1.6;
+      margin-bottom: 3rem;
+      text-transform: capitalize;
+    }
+    button {
+      color: $white;
+      border: 1px solid $white;
+      &:hover {
+        color: $primary;
+        border-color: $primary;
+      }
+    }
+  }
+}
+
+.products {
+  h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+}

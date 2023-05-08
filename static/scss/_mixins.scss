@@ -1,0 +1,24 @@
+@mixin flex(
+  $justify: false,
+  $align: false,
+  $direction: false,
+  $wrap: false,
+  $gap: false
+) {
+  display: flex;
+  @if $justify {
+    justify-content: $justify;
+  }
+  @if $align {
+    align-items: $align;
+  }
+  @if $direction {
+    flex-direction: $direction;
+  }
+  @if $wrap {
+    flex-wrap: $wrap;
+  }
+  @if $gap {
+    gap: $gap;
+  }
+}

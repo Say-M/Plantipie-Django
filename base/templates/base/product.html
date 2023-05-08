@@ -1,0 +1,41 @@
+{% extends './common/main.html' %}
+<!-- divider -->
+{% block title %}All Plants | Plantipie{%endblock %}
+<!-- divider -->
+{% block content %}
+<section class="my-5">
+  <div class="products">
+    <div class="container">
+      <h3>All Products</h3>
+      <div class="row">
+        {% load static %}
+        <!-- divider -->
+        {% for i in range %}
+        <div class="col-lg-3">
+          <a href="{% url 'product_detail' i %}" class="product">
+            <div class="image">
+              <img
+                class="img-fluid"
+                src="{% static '/assets/images/product-1.jpg' %}"
+                alt=""
+              />
+            </div>
+            <div class="info">
+              <div class="price">
+                <h5>&#2547; 576</h5>
+                <span>&#2547; 600</span>
+              </div>
+              <h6>Magni Dolores Eosquies</h6>
+              <div class="other">
+                <span><i class="fa-solid fa-star"></i> 5.0</span>
+                <span><i class="fa-solid fa-shopping-cart"></i></span>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
