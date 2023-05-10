@@ -4,7 +4,7 @@
 <!-- Divider -->
 {% block content %}
 <section class="container">
-  <form class="auth-form" action="/login" method="post">
+  <form class="auth-form" action="" method="post">
     {% csrf_token %}
     <div>
       <h4 class="mb-4">Create an account</h4>
@@ -49,10 +49,10 @@
         />
       </div>
       <p class="text-muted">
-        Don't have an account ?
-        <a href="{% url 'signup' %}">Create an account</a>
+        Have an account ?
+        <a href="{% url 'login' %}">Login Here</a>
       </p>
-      <button type="submit" class="btn btn-theme">Login</button>
+      <button type="submit" class="btn btn-theme">Register</button>
     </div>
   </form>
 </section>
