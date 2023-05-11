@@ -11,6 +11,9 @@ def product(request):
 def product_detail(request, id):
     return render(request, 'base/product_detail.html', {'range': range(1, 5)})
 
+def checkout(request):
+    return render(request, 'base/checkout.html')
+
 def login(request):
     return render(request, 'base/auth/login.html')
 
