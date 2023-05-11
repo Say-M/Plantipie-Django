@@ -129,3 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'base.auth.EmailBackend',
+]

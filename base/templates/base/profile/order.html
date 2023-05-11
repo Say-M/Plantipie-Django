@@ -1,0 +1,48 @@
+{% extends '../common/main.html' %}
+<!-- Divider -->
+{% block title %}{{ user.first_name }} {{ user.last_name }}'s orders |
+Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
+<!-- Divider -->
+{% block content %}
+<section class="container">
+  <div class="profile_wrapper">
+    {% include './aside.html' %}
+    <div class="right">
+      <div class="table-responsive">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Order ID</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">Order Status</th>
+              <th scope="col">Total</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range %}
+            <tr>
+              <th scope="row">{{ i }}</th>
+              <td>INV33221{{ i }}</td>
+              <td>12 Jan 2023</td>
+              <td>
+                <span class="badge bg-success">Delivered</span>
+              </td>
+              <td>1000</td>
+              <td>
+                <a
+                  href="/order/{{ order.order_id }}"
+                  class="btn btn-sm btn-theme"
+                  >View</a
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

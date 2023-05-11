@@ -4,10 +4,32 @@
 <!-- Divider -->
 {% block content %}
 <section class="container">
-  <form class="auth-form" action="/login" method="post">
+  <form class="auth-form" action="" method="post">
     {% csrf_token %}
     <div>
       <h4 class="mb-4">Create an account</h4>
+      <div class="form-group mb-3">
+        <label class="mb-1" for="first_name">First name</label>
+        <input
+          type="first_name"
+          name="first_name"
+          class="form-control"
+          id="first_name"
+          placeholder="Enter first_name"
+          required
+        />
+      </div>
+      <div class="form-group mb-3">
+        <label class="mb-1" for="last_name">Last name</label>
+        <input
+          type="last_name"
+          name="last_name"
+          class="form-control"
+          id="last_name"
+          placeholder="Enter last_name"
+          required
+        />
+      </div>
       <div class="form-group mb-3">
         <label class="mb-1" for="email">Email address</label>
         <input
@@ -15,27 +37,8 @@
           name="email"
           class="form-control"
           id="email"
-          placeholder="Enter email"
-        />
-      </div>
-      <div class="form-group mb-3">
-        <label class="mb-1" for="firstname">First name</label>
-        <input
-          type="firstname"
-          name="firstname"
-          class="form-control"
-          id="firstname"
-          placeholder="Enter firstname"
-        />
-      </div>
-      <div class="form-group mb-3">
-        <label class="mb-1" for="lastname">Last name</label>
-        <input
-          type="lastname"
-          name="lastname"
-          class="form-control"
-          id="lastname"
-          placeholder="Enter lastname"
+          placeholder="Enter email address"
+          required
         />
       </div>
       <div class="form-group mb-3">
@@ -46,13 +49,14 @@
           class="form-control"
           id="password"
           placeholder="Password"
+          required
         />
       </div>
       <p class="text-muted">
-        Don't have an account ?
-        <a href="{% url 'signup' %}">Create an account</a>
+        Have an account ?
+        <a href="{% url 'login' %}">Login Here</a>
       </p>
-      <button type="submit" class="btn btn-theme">Login</button>
+      <button type="submit" class="btn btn-theme">Register</button>
     </div>
   </form>
 </section>
