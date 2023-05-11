@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from .models import Plant
+from .forms import PlantForm
 
 # Create your views here.
 
@@ -21,13 +23,23 @@ def login_view(request):
     if request.method == "POST":
         email=request.POST.get("email")
         password=request.POST.get("password")
-        print(email)
-        print(password)
         user=authenticate(request,username=email,password=password)
         if user is not None:
             login(request,user)
             return redirect('home')
     return render(request, 'base/auth/login.html')
+
+@login_required(login_url="/login")
+def create_plant_item(request):
+    if request.method == 'POST':
+        form = PlantForm(request.POST, request.FILES)
+        if form.is_valid():
+            plant=form.save(commit=False)
+            plant.save()
+            return redirect('home')
+    else:
+        form = PlantForm()
+    return render(request,'base/create_plant_item.html',{'form': form})
 
 def logout_user(request):
     logout(request)
@@ -43,6 +55,5 @@ def signup(request):
         password=request.POST.get("password")
         my_user = User.objects.create_user(username=email, password=password, first_name=firstname, last_name=lastname)
         my_user.save()
-        print("success")
         return redirect("login")
     return render(request, 'base/auth/signup.html')

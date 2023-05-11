@@ -13,6 +13,7 @@
               <i class="fa-solid fa-cart-shopping"></i>
             </div>
           {% endif %}
+        {%else%}
         {% endif %}
         {% if request.user.is_authenticated %}
           {% if user.first_name == "admin" %}
@@ -21,7 +22,7 @@
               Welcome {{ user.first_name }}
             </button>
             <span class="dropdown-menu">
-              <a class="dropdown-item" href="#">Create New Item</a>
+              <a class="dropdown-item" href="{% url 'create-plant-item' %}">Create New Item</a>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
             </span>
           </span>
