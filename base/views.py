@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
@@ -10,12 +10,19 @@ from .forms import PlantForm
 def home(request):
     return render(request, 'base/home.html', {'range': range(1, 13),'curUser':""})
 
+@login_required(login_url="/login")
 def product(request):
-    return render(request, 'base/product.html', {'range': range(1, 13)})
+    # plants=Plant.objects.all()
+    # context={'plants':plants}
+    context=""
+    return render(request, 'base/product.html', context)
 
 @login_required(login_url="/login")
-def product_detail(request, id):
-    return render(request, 'base/product_detail.html', {'range': range(1, 5)})
+def product_detail(request, pk):
+    context=""
+    # plant=get_object_or_404(Plant,id=pk)
+    # context={"plant":plant}
+    return render(request, 'base/product_detail.html',context)
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -41,6 +48,7 @@ def create_plant_item(request):
         form = PlantForm()
     return render(request,'base/create_plant_item.html',{'form': form})
 
+@login_required(login_url="/login")
 def logout_user(request):
     logout(request)
     return redirect('home')
