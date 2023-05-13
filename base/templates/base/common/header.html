@@ -8,26 +8,16 @@
       </div>
       <div class="right">
         {% if request.user.is_authenticated %}
-<<<<<<< HEAD
         <!-- Divider -->
         {% if user.first_name != "admin" %}
         <div data-item="0" id="cart-btn" class="cart-btn">
           <i class="fa-solid fa-cart-shopping"></i>
         </div>
-=======
-          {% if user.first_name != "admin" %}
-            <div data-item="0" id="cart-btn">
-              <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-          {% endif %}
-        {%else%}
->>>>>>> Raihan
         {% endif %}
         <!-- Divider -->
         {% endif %}
         <!-- Divider -->
         {% if request.user.is_authenticated %}
-<<<<<<< HEAD
         <!-- Divider -->
         <a href="{% url 'profile' %}" class="user">
           {% load static %}
@@ -37,29 +27,6 @@
             <h6>{{user.first_name}} {{user.last_name}}</h6>
           </div>
         </a>
-=======
-          {% if user.first_name == "admin" %}
-          <span class="btn-group">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Welcome {{ user.first_name }}
-            </button>
-            <span class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'create-plant-item' %}">Create New Item</a>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </span>
-          </span>
-          {% else %}
-          <span class="btn-group">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Welcome {{ user.first_name }}
-            </button>
-            <span class="dropdown-menu">
-              <a class="dropdown-item" href="#">My Order</a>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </span>
-          </span>
-          {% endif %}
->>>>>>> Raihan
         {% else %}
         <a class="auth-btn" href="{% url 'login' %}">
           <i class="fa-solid fa-user"></i>
