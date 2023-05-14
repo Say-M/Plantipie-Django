@@ -1,13 +1,30 @@
 <aside class="left">
+  {% with request.resolver_match.url_name as url_name %}
   <ul>
     <li>
-      <a href="{% url 'profile' %}" class="active">Profile</a>
+      <a
+        href="{% url 'profile' %}"
+        class="{% if url_name == 'profile' %}active{% endif %}"
+        >Profile</a
+      >
     </li>
     <li>
-      <a href="{% url 'orders' %}">Orders</a>
+      <a
+        href="{% url 'admin_product' %}"
+        class="{% if url_name == 'admin_product' %}active{% endif %}"
+        >Products</a
+      >
+    </li>
+    <li>
+      <a
+        href="{% url 'orders' %}"
+        class="{% if url_name == 'orders' %}active{% endif %}"
+        >Orders</a
+      >
     </li>
     <li>
       <a href="{% url 'logout' %}">Logout</a>
     </li>
   </ul>
+  {% endwith %}
 </aside>

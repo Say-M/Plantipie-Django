@@ -8,10 +8,13 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
   <div class="profile_wrapper">
     {% include './aside.html' %}
     <div class="right">
-      <form action="/profile_update" method="post">
+      <form action="" method="post">
+        {% csrf_token %}
         <div class="user_profile">
-          {% load static %}
-          <img src="{% static '/assets/images/user.jpg' %}" alt="" />
+          <img
+            src="/{{ user.profile.avatar }}"
+            alt="{{ user.first_name }} {{ user.last_name }}"
+          />
           <div>
             <h5>{{ user.first_name }} {{ user.last_name }}</h5>
             <input type="file" name="avatar" id="avatar" class="d-none" />
@@ -27,8 +30,10 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
               <input
                 type="text"
                 class="form-control"
+                name="first_name"
                 id="first_name"
                 value="{{ user.first_name }}"
+                required
               />
             </div>
           </div>
@@ -38,16 +43,37 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
               <input
                 type="text"
                 class="form-control"
+                name="last_name"
                 id="last_name"
                 value="{{ user.last_name }}"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone</label>
+              <input
+                type="tel"
+                class="form-control"
+                name="phone"
+                id="phone"
+                value="{{ user.profile.phone }}"
+                required
               />
             </div>
           </div>
           <div class="col-12">
             <div class="mb-3">
               <label for="adderss" class="form-label">Address</label>
-              <textarea class="form-control" id="adderss">
-{{ user.adderss }}</textarea
+              <textarea
+                class="form-control"
+                id="adderss"
+                name="address"
+                rows="3"
+                required
+              >
+{{ user.profile.address }}</textarea
               >
             </div>
           </div>

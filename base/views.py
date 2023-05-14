@@ -2,8 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from .models import Plant
-from .forms import PlantForm
+from .models import Plant, Profile
 
 # Create your views here.
 
@@ -23,14 +22,14 @@ def productDetailPage(request, id):
 #     context=""
 #     return render(request, 'base/product.html', context)
 
-# @login_required(login_url="/login")
+# @login_required(login_url="/login/")
 # def productDetailPage(request, pk):
 #     context=""
 #     # plant=get_object_or_404(Plant,id=pk)
 #     # context={"plant":plant}
 #     return render(request, 'base/product_detail.html',context)
 
-@login_required(login_url="/login")
+@login_required(login_url="/login/")
 def checkoutPage(request):
     return render(request, 'base/checkout.html')
 
@@ -40,11 +39,11 @@ def loginPage(request):
     if request.method == "POST":
         email=request.POST.get("email")
         password=request.POST.get("password")
-        print(email)
-        print(password)
         user=authenticate(request,email=email,password=password)
         if user is not None:
             login(request,user)
+            if(request.GET.get("next")):
+                return redirect(request.GET.get("next"))
             return redirect('home')
     return render(request, 'base/auth/login.html')
 
@@ -61,15 +60,38 @@ def signupPage(request):
         return redirect("login")
     return render(request, 'base/auth/signup.html')
 
-@login_required(login_url="/login")
+@login_required(login_url="/login/")
 def logoutUser(request):
     logout(request)
     return redirect('home')
 
-@login_required(login_url="/login")
+@login_required(login_url="/login/")
 def profilePage(request):
+    if(request.method == "POST"):
+        first_name=request.POST.get("first_name")
+        last_name=request.POST.get("last_name")
+        address=request.POST.get("address")
+        phone=request.POST.get("phone")
+        avatar=request.FILES.get("avatar")
+        user=request.user
+        user.first_name=first_name
+        user.last_name=last_name
+        Profile.objects.filter(user=user).update(address=address, phone=phone, avatar=avatar if avatar else user.profile.avatar)
+        user.save()
+        return redirect("profile")
     return render(request, 'base/profile/profile.html')
 
 @login_required(login_url="/login")
 def orderPage(request):
     return render(request, 'base/profile/order.html', {'range': range(1, 5)})
+
+
+@login_required(login_url="/login/")
+def adminProductPage(request):
+    plants=Plant.objects.all()
+    context={'plants':plants}
+    return render(request, 'base/profile/product.html', context)
+
+@login_required(login_url="/login/")
+def adminProductAddPage(request):
+    return render(request, 'base/profile/product_add.html')
