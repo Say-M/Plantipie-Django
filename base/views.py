@@ -40,12 +40,12 @@ def loginPage(request):
     if request.method == "POST":
         email=request.POST.get("email")
         password=request.POST.get("password")
-        print(email)
-        print(password)
         user=authenticate(request,email=email,password=password)
         if user is not None:
             login(request,user)
             return redirect('home')
+        else:
+            print("Failed")
     return render(request, 'base/auth/login.html')
 
 def signupPage(request):
@@ -53,8 +53,8 @@ def signupPage(request):
         return redirect('home')
     if request.method == "POST":
         email=request.POST.get("email")
-        firstname=request.POST.get("firstname")
-        lastname=request.POST.get("lastname")
+        firstname=request.POST.get("first_name")
+        lastname=request.POST.get("last_name")
         password=request.POST.get("password")
         my_user = User.objects.create_user(username=email, password=password, first_name=firstname, last_name=lastname)
         my_user.save()
