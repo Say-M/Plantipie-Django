@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
-from .models import Plant, Profile
+from .models import Plant, Profile, AdditionalImage
 from .utils.delete import delete_file
 
 # Create your views here.
@@ -102,4 +102,25 @@ def adminProductPage(request):
 
 @login_required(login_url="/login/")
 def adminProductAddPage(request):
+    if request.method == "POST":
+        name=request.POST.get('name')
+        description=request.POST.get('description')
+        price=request.POST.get('price')
+        discount=request.POST.get('discount')
+        stock=request.POST.get('stock')
+        featured_image=request.POST.get('featured_image')
+        additional_image=request.POST.getlist('additional_images')
+        plant=Plant(
+            plant_name=name,
+            description=description,
+            discount=discount,
+            current_price=price,
+            stock_count=stock,
+            featured_image=featured_image,
+        )
+        plant.save()
+        for image in additional_image:
+            additional_image = AdditionalImage(plant=plant, image=image)
+            additional_image.save()
+        print("success")
     return render(request, 'base/profile/product_add.html')
