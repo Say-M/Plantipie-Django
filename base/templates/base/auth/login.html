@@ -4,7 +4,11 @@
 <!-- Divider -->
 {% block content %}
 <section class="container">
-  <form class="auth-form" action="" method="post">
+  <form
+    class="auth-form"
+    action="{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}"
+    method="post"
+  >
     {% csrf_token %}
     <div>
       <h4 class="mb-4">Welcome back!</h4>

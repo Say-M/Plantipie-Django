@@ -36,6 +36,7 @@
   .right {
     padding: 2rem 0;
     width: calc(100% - 300px);
+    min-height: 87vh;
     .user_profile {
       @include flex($align: center, $gap: 1rem);
       margin-bottom: 2rem;

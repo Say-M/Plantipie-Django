@@ -9,7 +9,7 @@
       <div class="right">
         {% if request.user.is_authenticated %}
         <!-- Divider -->
-        {% if user.first_name != "admin" %}
+        {% if request.user.is_authenticated %}
         <div data-item="0" id="cart-btn" class="cart-btn">
           <i class="fa-solid fa-cart-shopping"></i>
         </div>
@@ -20,8 +20,10 @@
         {% if request.user.is_authenticated %}
         <!-- Divider -->
         <a href="{% url 'profile' %}" class="user">
-          {% load static %}
-          <img src="{% static '/assets/images/user.jpg' %}" alt="" />
+          <img
+            src="/{{user.profile.avatar}}"
+            alt="{{user.first_name}} {{user.last_name}}"
+          />
           <div>
             <p>Welcome!</p>
             <h6>{{user.first_name}} {{user.last_name}}</h6>
