@@ -7,6 +7,7 @@ class PlantAdmin(admin.ModelAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     readonly_fields=('id',)
+    list_display = ('user', 'address', 'phone', 'role')
 
 admin.site.register(Plant,PlantAdmin)
 admin.site.register(Profile, ProfileAdmin)

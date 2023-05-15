@@ -85,4 +85,11 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
     </div>
   </div>
 </section>
+{% endblock %} {% block script %}
+<script>
+  const avatar = document.querySelector('#avatar')
+  avatar.addEventListener('change', function () {
+    this.form.submit()
+  })
+</script>
 {% endblock %}

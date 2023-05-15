@@ -2,9 +2,11 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
 from .models import Plant, Profile
-from .utils.delete import delete_file
+from .utils.delete_file import delete_file
+from .utils.upload_file import upload_file
 
 # Create your views here.
 
@@ -69,6 +71,7 @@ def logoutUser(request):
 
 @login_required(login_url="/login/")
 def profilePage(request):
+    print(request.user.profile.role)
     if(request.method == "POST"):
         first_name=request.POST.get("first_name")
         last_name=request.POST.get("last_name")
@@ -78,11 +81,12 @@ def profilePage(request):
         user=request.user
         user.first_name=first_name
         user.last_name=last_name
-        fss=FileSystemStorage(location='static/assets/images', base_url='assets/images')
-        file=fss.save(avatar.name,avatar)
-        if(user.profile.avatar and avatar):
-            delete_file('static/' + str(user.profile.avatar))
-        Profile.objects.filter(user=user).update(address=address, phone=phone, avatar=fss.url(file) if avatar else user.profile.avatar)
+        avatar_url=""
+        if(avatar):
+            avatar_url=upload_file('static/assets/images', 'assets/images', avatar)
+            if(user.profile.avatar):
+                delete_file('static/' + str(user.profile.avatar))
+        Profile.objects.filter(user=user).update(address=address, phone=phone, avatar=avatar_url if avatar else user.profile.avatar)
         user.save()
         return redirect("profile")
     return render(request, 'base/profile/profile.html')
@@ -94,10 +98,14 @@ def orderPage(request):
 
 @login_required(login_url="/login/")
 def adminProductPage(request):
+    if(request.user.profile.role != "Seller"):
+        return HttpResponse("You are not allowed to access this page")
     plants=Plant.objects.all()
     context={'plants':plants}
     return render(request, 'base/profile/product.html', context)
 
 @login_required(login_url="/login/")
 def adminProductAddPage(request):
+    if(request.user.profile.role != "Seller"):
+        return HttpResponse("You are not allowed to access this page")
     return render(request, 'base/profile/product_add.html')

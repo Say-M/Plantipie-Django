@@ -18,7 +18,12 @@ class Plant(models.Model):
         return self.plant_name
     
 class Profile(models.Model):
+    USER_ROLE = [
+        ('Seller', 'SELLER'),
+        ('Customer', 'CUSTOMER')
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=14, null=True)
     avatar = models.ImageField(upload_to='assets/images', null=True)
+    role = models.CharField(choices=USER_ROLE, max_length=15, default='customer')
