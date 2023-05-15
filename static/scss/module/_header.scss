@@ -19,9 +19,9 @@ header {
     }
   }
   .right {
-    @include flex($align: center, $gap: 1rem);
-    div,
-    a {
+    @include flex($align: center, $gap: 1.5rem);
+    .cart-btn,
+    .auth-btn {
       cursor: pointer;
       font-size: 0.875rem;
       border-radius: 0.25rem;
@@ -34,7 +34,7 @@ header {
         border-color: $background;
       }
     }
-    div {
+    .cart-btn {
       position: relative;
       &::after {
         content: attr(data-item);
@@ -55,6 +55,29 @@ header {
     a {
       @include flex($align: center, $gap: 0.5rem);
       color: inherit;
+    }
+    .user {
+      @include flex($align: center, $gap: 0.75rem);
+      color: inherit;
+      img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      p {
+        font-size: 0.875rem;
+        color: lighten($color: $fontColor, $amount: 10%);
+        margin-bottom: 0.125rem;
+      }
+      h6 {
+        max-width: 8rem;
+        margin-bottom: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-weight: 700;
+      }
     }
   }
 }

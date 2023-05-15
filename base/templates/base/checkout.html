@@ -1,0 +1,179 @@
+{% extends './common/main.html' %}
+<!-- divider -->
+{% block title %}Process to checkout | Plantipie{%endblock %}
+<!-- divider -->
+{% block content %}
+<section class="container">
+  <h2 class="text-center my-5">Checkout</h2>
+  <form action="" method="post">
+    <div class="row flex-md-row flex-column-reverse">
+      <div class="col-xl-8 col-md-7">
+        <h5 class="mb-3">Personal Details</h5>
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="firstName">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                name="firstName"
+                id="firstName"
+                placeholder="Enter first name"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="lastName">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                name="lastName"
+                id="lastName"
+                placeholder="Enter last name"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                placeholder="Enter email address"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="phone">Phone</label>
+              <input
+                type="tel"
+                class="form-control"
+                name="phone"
+                id="phone"
+                placeholder="Enter phone number"
+              />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-3">
+              <label class="form-label" for="shippingAddress"
+                >Shipping Address</label
+              >
+              <textarea
+                class="form-control"
+                name="shippingAddress"
+                id="shippingAddress"
+                placeholder="Enter shipping address"
+              ></textarea>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-3">
+              <label class="form-label" for="billingAddress"
+                >Billing Address</label
+              >
+              <textarea
+                class="form-control"
+                name="billingAddress"
+                id="billingAddress"
+                placeholder="Enter shipping address"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <h5 class="mb-3">Payment Information</h5>
+        <div class="form-check form-check-inline mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="paymentMethod"
+            id="bkash"
+            value="BKash"
+          />
+          <label class="form-check-label" for="bkash">BKash</label>
+        </div>
+        <div class="form-check form-check-inline mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="paymentMethod"
+            id="nagad"
+            value="Nagad"
+          />
+          <label class="form-check-label" for="nagad">Nagad</label>
+        </div>
+        <div class="form-check form-check-inline mb-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="paymentMethod"
+            id="cod"
+            value="Cash On Delivary"
+          />
+          <label class="form-check-label" for="cod">Cash On Delivary</label>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="transactionId"
+                >Transaction ID</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="transactionId"
+                id="transactionId"
+                placeholder="Enter transaction ID"
+              />
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-theme mb-5" type="submit">
+          Continue To Checkout
+        </button>
+      </div>
+      <div class="col-xl-4 col-md-5">
+        <h5 class="mb-3">Your Plants</h5>
+        <div class="products mb-4 mb-md-0">
+          {% load static %}
+          <ul>
+            <li>
+              <div class="image">
+                <img src="{% static '/assets/images/product-1.jpg' %}" alt="" />
+              </div>
+              <div>
+                <h6>
+                  <a href="{% url 'product_detail' '1' %}">Borosil Paper Cup</a>
+                  <span>
+                    <i class="fa-solid fa-close"></i>
+                  </span>
+                </h6>
+                <div class="price">
+                  <span>&#2547; 100</span
+                  ><span class="available">In Stock (24 Items)</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="quantity">
+                    <span>
+                      <i class="fa-solid fa-minus"></i>
+                    </span>
+                    <span>2</span>
+                    <span>
+                      <i class="fa-solid fa-plus"></i>
+                    </span>
+                  </div>
+                  <h5 class="mb-0 fw-bold">&#2547; 200</h5>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+{% endblock %}

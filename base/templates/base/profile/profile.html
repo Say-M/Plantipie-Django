@@ -1,0 +1,62 @@
+{% extends '../common/main.html' %}
+<!-- Divider -->
+{% block title %}{{ user.first_name }} {{ user.last_name }} |
+Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
+<!-- Divider -->
+{% block content %}
+<section class="container">
+  <div class="profile_wrapper">
+    {% include './aside.html' %}
+    <div class="right">
+      <form action="/profile_update" method="post">
+        <div class="user_profile">
+          {% load static %}
+          <img src="{% static '/assets/images/user.jpg' %}" alt="" />
+          <div>
+            <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+            <input type="file" name="avatar" id="avatar" class="d-none" />
+            <label for="avatar" class="btn btn-sm btn-theme"
+              >Change Avatar <i class="fa-solid fa-edit ms-2"></i
+            ></label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="first_name" class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="first_name"
+                value="{{ user.first_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="last_name"
+                value="{{ user.last_name }}"
+              />
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-3">
+              <label for="adderss" class="form-label">Address</label>
+              <textarea class="form-control" id="adderss">
+{{ user.adderss }}</textarea
+              >
+            </div>
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-theme">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -8,9 +8,17 @@
     <div class="container">
       <h3>All Products</h3>
       <div class="row">
+<<<<<<< HEAD
+        {% load static %}
+        <!-- divider -->
+        {% for i in range %}
+        <div class="col-xl-3 col-lg-4 col-md-6">
+          <a href="{% url 'product_detail' i %}" class="product">
+=======
         {% for plant in plants %}
         <div class="col-lg-3">
           <a href="{% url 'product_detail' plant.id %}" class="product">
+>>>>>>> Raihan
             <div class="image">
               <img
                 class="img-fluid"

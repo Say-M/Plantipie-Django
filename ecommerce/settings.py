@@ -130,5 +130,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'base.auth.EmailBackend',
+]
 MEDIA_ROOT=''
 MEDIA_URL=''

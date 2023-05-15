@@ -1,0 +1,50 @@
+@import '../variables', '../mixins';
+
+.profile_wrapper {
+  @include flex($gap: 1rem);
+  .left {
+    max-width: 300px;
+    width: 100%;
+    border-right: 1px solid $border;
+    padding: 2rem 1rem 2rem 0;
+    ul {
+      @include resetList;
+      li {
+        &:last-child {
+          a {
+            margin-bottom: 0;
+          }
+        }
+        a {
+          display: block;
+          color: $fontColor;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          transition: background-color 0.25s ease-in-out;
+          margin-bottom: 0.5rem;
+          &:hover {
+            background-color: $background;
+          }
+          &.active {
+            background-color: $primary;
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+  .right {
+    padding: 2rem 0;
+    width: calc(100% - 300px);
+    .user_profile {
+      @include flex($align: center, $gap: 1rem);
+      margin-bottom: 2rem;
+      img {
+        width: 4rem;
+        height: 4rem;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+  }
+}

@@ -8,37 +8,27 @@
       </div>
       <div class="right">
         {% if request.user.is_authenticated %}
-          {% if user.first_name != "admin" %}
-            <div data-item="0" id="cart-btn">
-              <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-          {% endif %}
-        {%else%}
+        <!-- Divider -->
+        {% if user.first_name != "admin" %}
+        <div data-item="0" id="cart-btn" class="cart-btn">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
         {% endif %}
+        <!-- Divider -->
+        {% endif %}
+        <!-- Divider -->
         {% if request.user.is_authenticated %}
-          {% if user.first_name == "admin" %}
-          <span class="btn-group">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Welcome {{ user.first_name }}
-            </button>
-            <span class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'create-plant-item' %}">Create New Item</a>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </span>
-          </span>
-          {% else %}
-          <span class="btn-group">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Welcome {{ user.first_name }}
-            </button>
-            <span class="dropdown-menu">
-              <a class="dropdown-item" href="#">My Order</a>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </span>
-          </span>
-          {% endif %}
+        <!-- Divider -->
+        <a href="{% url 'profile' %}" class="user">
+          {% load static %}
+          <img src="{% static '/assets/images/user.jpg' %}" alt="" />
+          <div>
+            <p>Welcome!</p>
+            <h6>{{user.first_name}} {{user.last_name}}</h6>
+          </div>
+        </a>
         {% else %}
-        <a href="{% url 'login' %}">
+        <a class="auth-btn" href="{% url 'login' %}">
           <i class="fa-solid fa-user"></i>
           Login
         </a>
@@ -51,7 +41,7 @@
 <aside class="cart-wrapper" id="cart-wrapper">
   <div class="cart-header">
     <h4>My Cart</h4>
-    <span id='cart-close-btn'><i class="fa-solid fa-times"></i></span>
+    <span id="cart-close-btn"><i class="fa-solid fa-times"></i></span>
   </div>
   <div class="cart-body">
     {% load static %}
@@ -150,6 +140,8 @@
       <span class="fw-normal">Total :</span>
       <span class="fw-bold">&#2547; 600</span>
     </h5>
-    <a href="" class="btn btn-theme" style="width: 100%">Checkout</a>
+    <a href="{% url 'checkout' %}" class="btn btn-theme" style="width: 100%"
+      >Checkout</a
+    >
   </div>
 </aside>
