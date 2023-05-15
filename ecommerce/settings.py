@@ -132,7 +132,7 @@ STATICFILES_DIRS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'base.lib.auth.EmailBackend',
+    'base.utils.auth.EmailBackend',
 ]
 
 MEDIA_URL=''
