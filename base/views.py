@@ -122,5 +122,5 @@ def adminProductAddPage(request):
         for image in additional_image:
             additional_image = AdditionalImage(plant=plant, image=image)
             additional_image.save()
-        print("success")
+        
     return render(request, 'base/profile/product_add.html')
