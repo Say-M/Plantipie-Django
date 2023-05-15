@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
-from .models import Plant, Profile
+from .models import Product, Profile
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
 
@@ -100,7 +100,7 @@ def orderPage(request):
 def adminProductPage(request):
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
-    plants=Plant.objects.all()
+    plants=Product.objects.all()
     context={'plants':plants}
     return render(request, 'base/profile/product.html', context)
 
