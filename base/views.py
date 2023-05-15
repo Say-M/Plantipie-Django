@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from .models import Plant, Profile
-from .lib.delete import delete_file
+from .utils.delete import delete_file
 
 # Create your views here.
 
