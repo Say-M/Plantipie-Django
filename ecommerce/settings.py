@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from os import path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -131,7 +132,8 @@ STATICFILES_DIRS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'base.auth.EmailBackend',
+    'base.lib.auth.EmailBackend',
 ]
-MEDIA_ROOT=''
+
 MEDIA_URL=''
+MEDIA_ROOT=path.join(BASE_DIR, 'static')

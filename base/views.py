@@ -1,8 +1,10 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from .models import Plant, Profile
+from .lib.delete import delete_file
 
 # Create your views here.
 
@@ -76,7 +78,11 @@ def profilePage(request):
         user=request.user
         user.first_name=first_name
         user.last_name=last_name
-        Profile.objects.filter(user=user).update(address=address, phone=phone, avatar=avatar if avatar else user.profile.avatar)
+        fss=FileSystemStorage(location='static/assets/images', base_url='assets/images')
+        file=fss.save(avatar.name,avatar)
+        if(user.profile.avatar and avatar):
+            delete_file('static/' + str(user.profile.avatar))
+        Profile.objects.filter(user=user).update(address=address, phone=phone, avatar=fss.url(file) if avatar else user.profile.avatar)
         user.save()
         return redirect("profile")
     return render(request, 'base/profile/profile.html')

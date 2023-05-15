@@ -1,5 +1,7 @@
+import os
 from django.contrib.auth.models import User
 from django.db import models
+
 # Create your models here.
 class Plant(models.Model):
     cover_photo = models.ImageField(upload_to='base/plants/assets/images')
@@ -19,4 +21,4 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=14, null=True)
-    avatar = models.ImageField(upload_to='static/assets/images', null=True)
+    avatar = models.ImageField(upload_to='assets/images', null=True)
