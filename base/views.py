@@ -62,7 +62,7 @@ def signupPage(request):
         password=request.POST.get("password")
         print(first_name, last_name, email, username, password)
         my_user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
-        profile = Profile.objects.create(user=my_user, phone="", address="", avatar="")
+        profile = Profile.objects.create(user=my_user)
         profile.save()
         my_user.save()
         return redirect("login")
