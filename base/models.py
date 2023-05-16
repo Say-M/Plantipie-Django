@@ -24,4 +24,22 @@ class Profile(models.Model):
     address = models.CharField(max_length=255, default='')
     phone = models.CharField(max_length=14, default='')
     avatar = models.ImageField(upload_to='assets/images', null=True)
-    role = models.CharField(choices=USER_ROLE, max_length=15, default='customer')
+    role = models.CharField(choices=USER_ROLE, max_length=15, default='Customer')
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(validators=[Min(1)], default=1)
+
+class Order(models.Model):
+    ORDER_STATUS = [
+        ('Pending', 'PENDING'),
+        ('Delivered', 'DELIVERED'),
+        ('Cancelled', 'CANCELLED')
+    ]
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(validators=[Min(1)], default=1)
+    status = models.CharField(choices=ORDER_STATUS, max_length=15, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
