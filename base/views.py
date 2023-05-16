@@ -103,24 +103,33 @@ def adminProductPage(request):
 @login_required(login_url="/login/")
 def adminProductAddPage(request):
     if request.method == "POST":
-        name=request.POST.get('name')
-        description=request.POST.get('description')
-        price=request.POST.get('price')
-        discount=request.POST.get('discount')
-        stock=request.POST.get('stock')
-        featured_image=request.POST.get('featured_image')
-        additional_image=request.POST.getlist('additional_images')
-        plant=Plant(
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        discount = request.POST.get('discount')
+        stock = request.POST.get('stock')
+        featured_image = request.FILES.get('featured_image')
+        additional_images = request.FILES.getlist('additional_images')
+
+        if featured_image is not None:
+            fss = FileSystemStorage(location='static/assets/images', base_url='assets/images')
+            file_save = fss.save(featured_image.name, featured_image)
+            featured_image_url = fss.url(file_save)
+        else:
+            print("Failed")
+
+        plant = Plant(
             plant_name=name,
             description=description,
-            discount=discount,
+            discount=discount,  
             current_price=price,
             stock_count=stock,
-            featured_image=featured_image,
+            featured_image=featured_image_url,
         )
         plant.save()
-        for image in additional_image:
+
+        for image in additional_images:
             additional_image = AdditionalImage(plant=plant, image=image)
             additional_image.save()
-        
+
     return render(request, 'base/profile/product_add.html')

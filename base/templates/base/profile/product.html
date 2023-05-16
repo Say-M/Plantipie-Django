@@ -35,7 +35,33 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
             </tr>
           </thead>
           <tbody>
+            {% for plant in plants %}
             <tr>
+              <td class="align-middle">
+                <div class="table-image">
+                  
+                  <img
+                    src="/{{plant.featured_image}}"
+                    alt="{{plant.plant_name}}"
+                  />
+                  <div>
+                    <h6>{{plant.plant_name}}</h6>
+                    <p><strong>Quantity : </strong> {{plant.stock_count}}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle text-end">&#2547; {{plant.current_price}}</td>
+              <td class="align-middle text-end">{{plant.discount}}</td>
+              <td class="align-middle text-end">{{plant.stock_count}}</td>
+              <td class="align-middle">
+                <div class="d-flex gap-3">
+                  <a href="#" class="btn btn-sm btn-theme">Edit</a>
+                  <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+            <!-- <tr>
               <td class="align-middle">
                 <div class="table-image">
                   {% load static %}
@@ -58,7 +84,7 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
                   <a href="#" class="btn btn-sm btn-danger">Delete</a>
                 </div>
               </td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
       </div>
