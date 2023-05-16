@@ -41,9 +41,9 @@ def loginPage(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == "POST":
-        email=request.POST.get("email")
+        username=request.POST.get("username")
         password=request.POST.get("password")
-        user=authenticate(request,email=email,password=password)
+        user=authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
             if(request.GET.get("next")):
@@ -55,11 +55,15 @@ def signupPage(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == "POST":
+        first_name=request.POST.get("first_name")
+        last_name=request.POST.get("last_name")
         email=request.POST.get("email")
-        firstname=request.POST.get("firstname")
-        lastname=request.POST.get("lastname")
+        username=request.POST.get("username")
         password=request.POST.get("password")
-        my_user = User.objects.create_user(username=email, password=password, first_name=firstname, last_name=lastname)
+        print(first_name, last_name, email, username, password)
+        my_user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+        profile = Profile.objects.create(user=my_user, phone="", address="", avatar="")
+        profile.save()
         my_user.save()
         return redirect("login")
     return render(request, 'base/auth/signup.html')
@@ -83,9 +87,9 @@ def profilePage(request):
         user.last_name=last_name
         avatar_url=""
         if(avatar):
-            avatar_url=upload_file('static/assets/images', 'assets/images', avatar)
+            avatar_url=upload_file('static/assets/images', 'static/assets/images', avatar)
             if(user.profile.avatar):
-                delete_file('static/' + str(user.profile.avatar))
+                delete_file(str(user.profile.avatar))
         Profile.objects.filter(user=user).update(address=address, phone=phone, avatar=avatar_url if avatar else user.profile.avatar)
         user.save()
         return redirect("profile")
