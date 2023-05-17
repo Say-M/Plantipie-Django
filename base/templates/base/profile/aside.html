@@ -8,6 +8,7 @@
         >Profile</a
       >
     </li>
+    {% if request.user.profile.role == 'Seller' %}
     <li>
       <a
         href="{% url 'admin_product' %}"
@@ -15,6 +16,7 @@
         >Products</a
       >
     </li>
+    {% endif %}
     <li>
       <a
         href="{% url 'orders' %}"

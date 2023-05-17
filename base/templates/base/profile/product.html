@@ -28,7 +28,8 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
           <thead>
             <tr>
               <th scope="col">Producct</th>
-              <th scope="col" class="text-end">Price</th>
+              <th scope="col" class="text-end">Original Price</th>
+              <th scope="col" class="text-end">Discount Price</th>
               <th scope="col" class="text-end">Discount</th>
               <th scope="col" class="text-end">Stock</th>
               <th scope="col">Actions</th>
@@ -51,6 +52,7 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
                 </div>
               </td>
               <td class="align-middle text-end">&#2547; {{plant.current_price}}</td>
+              <td class="align-middle text-end">{{plant.current_price|add:"-10"}}</td>
               <td class="align-middle text-end">{{plant.discount}}</td>
               <td class="align-middle text-end">{{plant.stock_count}}</td>
               <td class="align-middle">
@@ -76,6 +78,7 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
                 </div>
               </td>
               <td class="align-middle text-end">&#2547; 150</td>
+              <td class="align-middle text-end">&#2547; 100</td>
               <td class="align-middle text-end">10%</td>
               <td class="align-middle text-end">50</td>
               <td class="align-middle">
