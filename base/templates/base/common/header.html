@@ -20,10 +20,18 @@
         {% if request.user.is_authenticated %}
         <!-- Divider -->
         <a href="{% url 'profile' %}" class="user">
+          {% if user.profile.avatar %}
           <img
-            src="/{{user.profile.avatar}}"
-            alt="{{user.first_name}} {{user.last_name}}"
+            src="/{{ user.profile.avatar }}"
+            alt="{{ user.first_name }} {{ user.last_name }}"
           />
+          {% else %}
+          {% load static %}
+          <img
+            src="{% static '/assets/images/default-user.png' %}"
+            alt="{{ user.first_name }} {{ user.last_name }}"
+          />
+          {% endif %}
           <div>
             <p>Welcome!</p>
             <h6>{{user.first_name}} {{user.last_name}}</h6>

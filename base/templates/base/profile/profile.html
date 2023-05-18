@@ -11,10 +11,18 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
       <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="user_profile">
+          {% if user.profile.avatar %}
           <img
             src="/{{ user.profile.avatar }}"
             alt="{{ user.first_name }} {{ user.last_name }}"
           />
+          {% else %}
+          {% load static %}
+          <img
+            src="{% static '/assets/images/default-user.png' %}"
+            alt="{{ user.first_name }} {{ user.last_name }}"
+          />
+          {% endif %}
           <div>
             <h5>{{ user.first_name }} {{ user.last_name }}</h5>
             <input type="file" name="avatar" id="avatar" class="d-none" />
