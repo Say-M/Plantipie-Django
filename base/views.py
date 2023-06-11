@@ -119,8 +119,10 @@ def adminProductAddPage(request):
         price=request.POST.get('price')
         discount=request.POST.get('discount')
         stock=request.POST.get('stock')
-        featured_image=request.POST.get('featured_image')
-        additional_image=request.POST.getlist('additional_images')
+        featured_image=request.FILES.get('featured_image')
+        additional_images=request.FILES.getlist('additional_images')
+        if(featured_image):
+            featured_image=upload_file('static/assets/images', 'static/assets/images', featured_image)
         product=Product(
             name=name,
             description=description,
@@ -128,9 +130,12 @@ def adminProductAddPage(request):
             discount=discount,
             stock=stock,
             featured_image=featured_image,
+            created_by=request.user
         )
         product.save()
-        for image in additional_image:
-            additional_image = AdditionalImage(product=product, image=image)
-            additional_image.save()
+        if(additional_images):
+            for image in additional_images:
+                add_image=upload_file('static/assets/images', 'static/assets/images', image)
+                additional_image = AdditionalImage(product=product, image=add_image)
+                additional_image.save()
     return render(request, 'base/profile/product_add.html')

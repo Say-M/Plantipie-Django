@@ -10,6 +10,10 @@ class ProfileAdmin(admin.ModelAdmin):
     readonly_fields=('id',)
     list_display = ('user', 'address', 'phone', 'role', 'avatar')
 
+class AdditionalImageAdmin(admin.ModelAdmin):
+    readonly_fields=('id',)
+    list_display = ('product', 'image')
+
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Product,ProductAdmin)
-admin.site.register(AdditionalImage)
+admin.site.register(AdditionalImage, AdditionalImageAdmin)

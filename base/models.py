@@ -10,16 +10,13 @@ class Product(models.Model):
     discount = models.FloatField(validators=[Min(0.0), Max(100.0)], default=0)
     stock = models.IntegerField(validators=[Min(0)], default=0)
     featured_image = models.ImageField(upload_to='assets/images')
-    additional_images = models.ForeignKey('AdditionalImage', on_delete=models.CASCADE, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)  
 
 class AdditionalImage(models.Model):
-    image = models.ImageField(upload_to='assets/images',null=True)
-
-    def __str__(self):
-        return self.product.name
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(upload_to='assets/images')
 
 class Profile(models.Model):
     USER_ROLE = [
