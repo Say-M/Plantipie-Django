@@ -1,10 +1,9 @@
-from django.shortcuts import render,redirect, get_object_or_404
+from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.core.files.storage import FileSystemStorage
-from .models import Product, Profile
+from .models import Product, Profile, AdditionalImage
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
 
@@ -114,4 +113,29 @@ def adminProductPage(request):
 def adminProductAddPage(request):
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
+    if request.method == "POST":
+        name=request.POST.get('name')
+        description=request.POST.get('description')
+        price=request.POST.get('price')
+        discount=request.POST.get('discount')
+        stock=request.POST.get('stock')
+        featured_image=request.FILES.get('featured_image')
+        additional_images=request.FILES.getlist('additional_images')
+        if(featured_image):
+            featured_image=upload_file('static/assets/images', 'static/assets/images', featured_image)
+        product=Product(
+            name=name,
+            description=description,
+            price=price,
+            discount=discount,
+            stock=stock,
+            featured_image=featured_image,
+            created_by=request.user
+        )
+        product.save()
+        if(additional_images):
+            for image in additional_images:
+                add_image=upload_file('static/assets/images', 'static/assets/images', image)
+                additional_image = AdditionalImage(product=product, image=add_image)
+                additional_image.save()
     return render(request, 'base/profile/product_add.html')

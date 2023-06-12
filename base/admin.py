@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Profile
+from .models import Product, Profile, AdditionalImage
 
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
@@ -10,5 +10,10 @@ class ProfileAdmin(admin.ModelAdmin):
     readonly_fields=('id',)
     list_display = ('user', 'address', 'phone', 'role', 'avatar')
 
-admin.site.register(Product,ProductAdmin)
+class AdditionalImageAdmin(admin.ModelAdmin):
+    readonly_fields=('id',)
+    list_display = ('product', 'image')
+
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Product,ProductAdmin)
+admin.site.register(AdditionalImage, AdditionalImageAdmin)
