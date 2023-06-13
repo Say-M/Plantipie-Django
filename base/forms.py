@@ -29,4 +29,3 @@ class PlantForm(forms.ModelForm):
             'current_price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter current price...', 'required': True}),
             'stock_count': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter stock count...', 'required': True}),
         }
-

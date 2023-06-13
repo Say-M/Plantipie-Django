@@ -31,7 +31,7 @@ class Profile(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Plant, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(validators=[Min(1)], default=1)
 
 class Order(models.Model):
@@ -41,7 +41,7 @@ class Order(models.Model):
         ('Cancelled', 'CANCELLED')
     ]
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Plant, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(validators=[Min(1)], default=1)
     status = models.CharField(choices=ORDER_STATUS, max_length=15, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)

@@ -46,19 +46,20 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
                     alt="{{plant.plant_name}}"
                   />
                   <div>
-                    <h6>{{plant.plant_name}}</h6>
-                    <p><strong>Quantity : </strong> {{plant.stock_count}}</p>
+                    <h6>{{plant.name}}</h6>
+                    <p><strong>Quantity : </strong> {{plant.stock}}</p>
                   </div>
                 </div>
               </td>
-              <td class="align-middle text-end">&#2547; {{plant.current_price}}</td>
-              <td class="align-middle text-end">{{plant.current_price|add:"-10"}}</td>
+              <td class="align-middle text-end">&#2547; {{plant.price}}</td>
+              {% load customer_filter %}
+              <td class="align-middle text-end">{{plant.price|subtract:plant.discount}}</td>
               <td class="align-middle text-end">{{plant.discount}}</td>
-              <td class="align-middle text-end">{{plant.stock_count}}</td>
+              <td class="align-middle text-end">{{plant.stock}}</td>
               <td class="align-middle">
                 <div class="d-flex gap-3">
-                  <a href="#" class="btn btn-sm btn-theme">Edit</a>
-                  <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                  <a href="{% url 'edit_product' plant.id %}" class="btn btn-sm btn-theme">Edit</a>
+                  <a href="{% url 'delete_view' plant.id %}" class="btn btn-sm btn-danger">Delete</a>
                 </div>
               </td>
             </tr>

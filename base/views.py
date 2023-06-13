@@ -105,14 +105,12 @@ def orderPage(request):
 def adminProductPage(request):
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
-    plants=Plant.objects.all()
+    plants=Product.objects.all()
     context={'plants':plants}
     return render(request, 'base/profile/product.html', context)
 
 @login_required(login_url="/login/")
 def adminProductAddPage(request):
-    if(request.user.profile.role != "Seller"):
-        return HttpResponse("You are not allowed to access this page")
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
     if request.method == "POST":
@@ -127,21 +125,6 @@ def adminProductAddPage(request):
             featured_image=upload_file('static/assets/images', 'static/assets/images', featured_image)
         product=Product(
             name=name,
-        name = request.POST.get('name')
-        description = request.POST.get('description')
-        price = request.POST.get('price')
-        discount = request.POST.get('discount')
-        stock = request.POST.get('stock')
-        featured_image = request.FILES.get('featured_image')
-        additional_images = request.FILES.getlist('additional_images')
-
-        if featured_image is not None:
-            featured_image_url=upload_file('static/assets/images', 'static/assets/images', featured_image)
-        else:
-            print("Failed")
-
-        plant = Plant(
-            plant_name=name,
             description=description,
             price=price,
             discount=discount,
@@ -155,4 +138,43 @@ def adminProductAddPage(request):
                 add_image=upload_file('static/assets/images', 'static/assets/images', image)
                 additional_image = AdditionalImage(product=product, image=add_image)
                 additional_image.save()
-    return render(request, 'base/profile/product_add.html')
+        return redirect('admin_product')
+    return render(request, 'base/profile/product_add.html',{'action':'save'})
+
+@login_required(login_url="/login/")
+def editProduct(request,pk):
+    plant=Product.objects.get(id=pk)
+    additional_images=AdditionalImage.objects.filter(product=plant)
+    if request.method == "POST":
+        plant.name=request.POST.get('name')
+        plant.description=request.POST.get('description')
+        plant.price=request.POST.get('price')
+        plant.discount=request.POST.get('discount')
+        plant.stock=request.POST.get('stock')
+        updated_featured_image=request.FILES.get('featured_image')
+        if(updated_featured_image):
+            delete_file(plant.featured_image.path)
+            new_featured_image=upload_file('static/assets/images', 'static/assets/images', updated_featured_image)
+            plant.featured_image=new_featured_image
+        updated_additional_iamges=request.FILES.getlist('additional_images')
+        if(updated_additional_iamges):
+            for old_img in additional_images:
+                delete_file(old_img.image.path)
+                old_img.delete()
+            for image in updated_additional_iamges:
+                update_image = upload_file('static/assets/images', 'static/assets/images', image)
+                additional_image = AdditionalImage(product=plant, image=update_image)
+                additional_image.save()
+        plant.save()
+        return redirect('admin_product')
+    return render(request,'base/profile/product_add.html',{'action':'edit','plants':plant,'additional_image':additional_images})
+
+@login_required(login_url="/login/")
+def deleteProduct(request,pk):
+    plant=Product.objects.get(id=pk)
+    delete_file(plant.featured_image.path)
+    additional_image=AdditionalImage.objects.filter(product=plant)
+    for add_img in additional_image:
+        delete_file(add_img.image.path)
+    plant.delete()
+    return redirect('admin_product')
