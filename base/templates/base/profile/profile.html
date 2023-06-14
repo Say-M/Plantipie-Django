@@ -16,8 +16,7 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
             src="/{{ user.profile.avatar }}"
             alt="{{ user.first_name }} {{ user.last_name }}"
           />
-          {% else %}
-          {% load static %}
+          {% else %} {% load static %}
           <img
             src="{% static '/assets/images/default-user.png' %}"
             alt="{{ user.first_name }} {{ user.last_name }}"

@@ -117,8 +117,8 @@ def adminProductAddPage(request):
         name=request.POST.get('name')
         description=request.POST.get('description')
         price=request.POST.get('price')
-        discount=request.POST.get('discount')
-        stock=request.POST.get('stock')
+        discount=request.POST.get('discount') if request.POST.get('discount') else 0
+        stock=request.POST.get('stock') if request.POST.get('stock') else 0
         featured_image=request.FILES.get('featured_image')
         additional_images=request.FILES.getlist('additional_images')
         if(featured_image):
@@ -149,8 +149,8 @@ def editProduct(request,pk):
         plant.name=request.POST.get('name')
         plant.description=request.POST.get('description')
         plant.price=request.POST.get('price')
-        plant.discount=request.POST.get('discount')
-        plant.stock=request.POST.get('stock')
+        plant.discount=request.POST.get('discount') if request.POST.get('discount') else 0
+        plant.stock=request.POST.get('stock') if request.POST.get('stock') else 0
         updated_featured_image=request.FILES.get('featured_image')
         if(updated_featured_image):
             delete_file(str(plant.featured_image))
@@ -181,10 +181,31 @@ def deleteProduct(request,pk):
 
 @login_required(login_url="/login/")
 def addToCart(request,pk):
+    quantity=1
+    if(request.method == "GET") :
+        quantity=int(request.GET.get('quantity'))
+
     plant=Product.objects.get(id=pk)
-    cart=Cart(
-        user=request.user,
-        product=plant,
-        quantity=1
-    )
-    cart.save()
+
+    if(quantity == 0):
+        cart = Cart.objects.get(product__id=pk)
+        if(cart):
+            plant.stock += cart.quantity
+            plant.save()
+            cart.delete()
+        return redirect('home')
+
+    if(plant.stock < quantity):
+        messages.error(request, 'Not enough stock available')
+        return redirect('product_detail', pk=pk)
+    
+    plant.stock -= quantity
+    plant.save()
+
+    obj, cart = Cart.objects.update_or_create(user=request.user, product=plant)
+    obj.quantity += quantity
+    if(obj.quantity == 0):
+        obj.delete()
+    else:
+        obj.save()
+    return redirect('home')
