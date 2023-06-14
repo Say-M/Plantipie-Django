@@ -153,13 +153,13 @@ def editProduct(request,pk):
         plant.stock=request.POST.get('stock')
         updated_featured_image=request.FILES.get('featured_image')
         if(updated_featured_image):
-            delete_file(plant.featured_image.path)
+            delete_file(str(plant.featured_image.path))
             new_featured_image=upload_file('static/assets/images', 'static/assets/images', updated_featured_image)
             plant.featured_image=new_featured_image
         updated_additional_iamges=request.FILES.getlist('additional_images')
         if(updated_additional_iamges):
             for old_img in additional_images:
-                delete_file(old_img.image.path)
+                delete_file(str(old_img.image.path))
                 old_img.delete()
             for image in updated_additional_iamges:
                 update_image = upload_file('static/assets/images', 'static/assets/images', image)
