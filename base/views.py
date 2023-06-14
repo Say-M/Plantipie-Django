@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Product, Profile, AdditionalImage
+from .models import Product, Profile, AdditionalImage, Cart
+from django.contrib import messages
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
 
@@ -49,7 +50,7 @@ def loginPage(request):
                 return redirect(request.GET.get("next"))
             return redirect('home')
         else:
-            print("Failed")
+            messages.error(request, 'Incorrect username or password or email. Please enter the correct credentials.')
     return render(request, 'base/auth/login.html')
 
 def signupPage(request):
@@ -61,7 +62,7 @@ def signupPage(request):
         email=request.POST.get("email")
         username=request.POST.get("username")
         password=request.POST.get("password")
-        print(first_name, last_name, email, username, password)
+        # print(first_name, last_name, email, username, password)
         my_user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
         profile = Profile.objects.create(user=my_user)
         profile.save()
@@ -76,7 +77,6 @@ def logoutUser(request):
 
 @login_required(login_url="/login/")
 def profilePage(request):
-    print(request.user.profile.role)
     if(request.method == "POST"):
         first_name=request.POST.get("first_name")
         last_name=request.POST.get("last_name")
@@ -175,6 +175,16 @@ def deleteProduct(request,pk):
     delete_file(plant.featured_image.path)
     additional_image=AdditionalImage.objects.filter(product=plant)
     for add_img in additional_image:
-        delete_file(add_img.image.path)
+        delete_file(str(add_img.image.path))
     plant.delete()
     return redirect('admin_product')
+
+@login_required(login_url="/login/")
+def addToCart(request,pk):
+    plant=Product.objects.get(id=pk)
+    cart=Cart(
+        user=request.user,
+        product=plant,
+        quantity=1
+    )
+    cart.save()

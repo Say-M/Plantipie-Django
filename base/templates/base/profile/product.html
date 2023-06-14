@@ -53,7 +53,7 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
               </td>
               <td class="align-middle text-end">&#2547; {{plant.price}}</td>
               {% load customer_filter %}
-              <td class="align-middle text-end">{{plant.price|subtract:plant.discount}}</td>
+              <td class="align-middle text-end">{{plant.price|calculateDiscount:plant.discount}}</td>
               <td class="align-middle text-end">{{plant.discount}}</td>
               <td class="align-middle text-end">{{plant.stock}}</td>
               <td class="align-middle">
