@@ -1,7 +1,6 @@
 {% extends '../common/main.html' %}
 <!-- Divider -->
-{% block title %}{{ user.first_name }} {{ user.last_name }} |
-Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
+{% block title %}Add Product | Plantipie{% endblock %}
 <!-- Divider -->
 {% block content %}
 <section class="container">
@@ -105,99 +104,95 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
       <h5 class="mb-4">Edit Product</h5>
       <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-      <div class="mb-3">
-        <label for="name" class="form-label">Product Name</label>
-        <input
-          type="text"
-          class="form-control"
-          name="name"
-          id="name"
-          placeholder="Enter product name"
-          
-          value="{{plants.name}}"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label"
-          >Product Description</label
-        >
-        <textarea
-          class="form-control"
-          name="description"
-          id="description"
-          placeholder="Enter product description"
-          rows="10"
-          
-        >{{plants.description}}</textarea>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-lg-4">
-          <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input
-              type="number"
-              class="form-control"
-              name="price"
-              id="price"
-              placeholder="Enter price"
-              
-              value="{{plants.price}}"
-            />
+        <div class="mb-3">
+          <label for="name" class="form-label">Product Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="name"
+            id="name"
+            placeholder="Enter product name"
+            value="{{plants.name}}"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label"
+            >Product Description</label
+          >
+          <textarea
+            class="form-control"
+            name="description"
+            id="description"
+            placeholder="Enter product description"
+            rows="10"
+          >
+{{plants.description}}</textarea
+          >
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input
+                type="number"
+                class="form-control"
+                name="price"
+                id="price"
+                placeholder="Enter price"
+                value="{{plants.price}}"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="mb-3">
+              <label for="discount" class="form-label">Discount</label>
+              <input
+                type="number"
+                class="form-control"
+                name="discount"
+                id="discount"
+                placeholder="Enter discount"
+                value="{{plants.discount}}"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="mb-3">
+              <label for="stock" class="form-label">Stock</label>
+              <input
+                type="number"
+                class="form-control"
+                name="stock"
+                id="stock"
+                placeholder="Enter stock"
+                value="{{plants.stock}}"
+              />
+            </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="mb-3">
-            <label for="discount" class="form-label">Discount</label>
-            <input
-              type="number"
-              class="form-control"
-              name="discount"
-              id="discount"
-              placeholder="Enter discount"
-              
-              value="{{plants.discount}}"
-            />
-          </div>
+        <div class="mb-3">
+          <label for="featured_image" class="form-label">Featured Image</label>
+          <input
+            type="file"
+            class="form-control"
+            name="featured_image"
+            id="featured_image"
+          />
         </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="mb-3">
-            <label for="stock" class="form-label">Stock</label>
-            <input
-              type="number"
-              class="form-control"
-              name="stock"
-              id="stock"
-              placeholder="Enter stock"
-              
-              value="{{plants.stock}}"
-            />
-          </div>
+        <div class="mb-3">
+          <label for="additional_images" class="form-label"
+            >Additional Images</label
+          >
+          <input
+            type="file"
+            class="form-control"
+            name="additional_images"
+            id="additional_images"
+            multiple
+          />
         </div>
-      </div>
-      <div class="mb-3">
-        <label for="featured_image" class="form-label">Featured Image</label>
-        <input
-          type="file"
-          class="form-control"
-          name="featured_image"
-          id="featured_image"
-          
-        />
-      </div>
-      <div class="mb-3">
-        <label for="additional_images" class="form-label"
-          >Additional Images</label
-        >
-        <input
-          type="file"
-          class="form-control"
-          name="additional_images"
-          id="additional_images"
-          multiple
-        />
-      </div>
-      <button type="submit" class="btn btn-theme">Update</button>
-    </form>
+        <button type="submit" class="btn btn-theme">Update</button>
+      </form>
       {% endif %}
     </div>
   </div>
