@@ -127,7 +127,7 @@ def adminProductPage(request):
             plants=plants.annotate(lower_name=Lower('name')).filter(lower_name__icontains=search_query.lower())
     else:
         plants=Product.objects.all()
-    paginator=Paginator(plants,1)
+    paginator=Paginator(plants,10)
     page_number=request.GET.get('page')
     plantsFinal=paginator.get_page(page_number)
     totalPageNumber=plantsFinal.paginator.num_pages
@@ -204,7 +204,7 @@ def deleteProduct(request,pk):
     delete_file(str(plant.featured_image))
     additional_image=AdditionalImage.objects.filter(product=plant)
     for add_img in additional_image:
-        delete_file(str(add_img.image))
+        delete_file(str(add_img.image.path))
     plant.delete()
     return redirect('admin_product')
 
