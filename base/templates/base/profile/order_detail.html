@@ -1,0 +1,88 @@
+{% extends '../common/main.html' %}
+<!-- Divider -->
+{% block title %}{{order.first_name}} {{order.last_name}}'s invoice |
+Plantipie{% endblock %}
+<!-- Divider -->
+{% block content %}
+<section class="container">
+  <div class="order-detail">
+    <div class="invoice-information">
+      <p><strong>Invoice ID - </strong> INV-{{order.id}}</p>
+      <p><strong>Invoice Date - </strong> {{order.created_at}}</p>
+      <p><strong>Shipping Address - </strong> {{order.shipping_address}}</p>
+    </div>
+    <h5>Biller Information</h5>
+    <div class="biller-information">
+      <img
+        src="/{{order.user.profile.avatar}}"
+        alt="{{order.first_name}} {{order.last_name}}"
+      />
+      <div>
+        <h6>{{order.first_name}} {{order.last_name}}</h6>
+        <p><strong>Billing Address - </strong> {{order.billing_address}}</p>
+        <p><strong>Phone - </strong> {{order.phone}}</p>
+      </div>
+    </div>
+    <h5>Products</h5>
+    <div class="table-responsive">
+      <table class="table table-hover border">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th class="text-end">Unit Price</th>
+            <th class="text-end">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in order.products %}
+          <tr>
+            <td class="align-middle">
+              <div class="table-image">
+                <img
+                  src="/{{product.product.featured_image}}"
+                  alt="{{product.product.name}}"
+                />
+                <div>
+                  <h6>{{product.product.name}}</h6>
+                  <p><strong>Quantity : </strong> {{product.quantity}}</p>
+                </div>
+              </div>
+            </td>
+            <td class="align-middle text-end">&#2547; {{ product.price }}</td>
+            <td class="text-end align-middle">
+              &#2547; {{product.discount_price}}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" class="text-end"><strong>Subtotal</strong></td>
+            <td class="text-end">&#2547; {{order.total}}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="text-end"><strong>Shipping Fee</strong></td>
+            <td class="text-end">&#2547; 80</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="text-end"><strong>Total</strong></td>
+            <td class="text-end">&#2547; {{order.total|add:'80'}}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="text-end mt-3 no-print">
+      <button class="btn btn-sm btn-theme" id="print-btn">Print</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
+<!-- Divider -->
+{% block script %}
+<script>
+  const printBtn = document.getElementById('print-btn')
+  printBtn.addEventListener('click', () => {
+    window.print()
+  })
+</script>
+{% endblock %}

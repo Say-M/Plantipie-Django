@@ -53,9 +53,9 @@
     <span id="cart-close-btn"><i class="fa-solid fa-times"></i></span>
   </div>
   <div class="cart-body">
-    {% if request.user.cart_count %}
+    {% if user.cart_count %}
     <ul>
-      {% for cart in request.user.carts %}
+      {% for cart in user.carts %}
       <li>
         <div class="image">
           <img

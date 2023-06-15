@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Profile, AdditionalImage,Cart,Order
+from .models import Product, Profile, AdditionalImage, Cart, Order, OrderProduct
 
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
@@ -20,10 +20,15 @@ class CartAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     readonly_fields=('id',)
-    list_display=('ORDER_STATUS','user','product','quantity','status','created_at','updated_at')
+    list_display=('user','status','created_at','updated_at')
+
+class OrderProductAdmin(admin.ModelAdmin):
+    readonly_fields=('id',)
+    list_display=('product','quantity','price','discount')
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(AdditionalImage, AdditionalImageAdmin)
 admin.site.register(Cart,CartAdmin)
 admin.site.register(Order,OrderAdmin)
+admin.site.register(OrderProduct,OrderProductAdmin)

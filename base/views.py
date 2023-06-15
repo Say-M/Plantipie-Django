@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Product, Profile, AdditionalImage, Cart
+from .models import Product, Profile, AdditionalImage, Cart, Order, OrderProduct
 from django.contrib import messages
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
@@ -35,6 +35,43 @@ def productDetailPage(request, id):
 
 @login_required(login_url="/login/")
 def checkoutPage(request):
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        shipping_address = request.POST.get("shipping_address")
+        billing_address = request.POST.get("billing_address")
+        payment_method = request.POST.get("payment_method")
+        transaction_id = request.POST.get("transaction_id") if request.POST.get("transaction_id") else None
+        
+        order = Order(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone=phone,
+            shipping_address=shipping_address,
+            billing_address=billing_address,
+            payment_method=payment_method,
+            transaction_id=transaction_id,
+            user=request.user,
+        )
+        order.save()
+
+        carts = request.user.carts()
+        print(carts)
+        for cart in carts:
+            order_product = OrderProduct(
+                order=order,
+                product=cart.product,
+                quantity=cart.quantity,
+                price=cart.product.price,
+                discount=cart.product.discount,
+            )
+            order_product.save()
+            cart.delete()
+        return redirect('home')
+
     return render(request, 'base/checkout.html')
 
 def loginPage(request):
@@ -98,7 +135,23 @@ def profilePage(request):
 
 @login_required(login_url="/login")
 def orderPage(request):
-    return render(request, 'base/profile/order.html', {'range': range(1, 5)})
+    orders = []
+    if request.user.profile.role == "Seller":
+        orders = Order.objects.all()
+    else:
+        orders = Order.objects.filter(user=request.user)
+
+    context = {
+        "orders": orders
+    }
+    
+    return render(request, 'base/profile/order.html', context)
+
+@login_required(login_url="/login")
+def orderDetailPage(request, pk):
+    order = Order.objects.get(id=pk)
+    context = {"order": order}
+    return render(request, 'base/profile/order_detail.html', context)
 
 
 @login_required(login_url="/login/")

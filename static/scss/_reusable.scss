@@ -119,6 +119,9 @@
     object-fit: cover;
     border-radius: 0.25rem;
   }
+  a {
+    color: initial;
+  }
   p {
     margin-bottom: 0;
     color: lighten($color: $fontColor, $amount: 25%);
@@ -126,5 +129,16 @@
     strong {
       font-weight: 500;
     }
+  }
+}
+
+.empty-cart {
+  padding: 2 1rem;
+  text-align: center;
+}
+
+.no-print {
+  @media print {
+    display: none;
   }
 }

@@ -14,6 +14,9 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)  
 
+    def discount_price(self):
+        return self.price - ((self.price * self.discount) / 100)
+
 class AdditionalImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to='assets/images')
@@ -57,11 +60,46 @@ class Order(models.Model):
     ORDER_STATUS = [
         ('Pending', 'PENDING'),
         ('Delivered', 'DELIVERED'),
-        ('Cancelled', 'CANCELLED')
+        ('Canceled', 'CANCELED')
     ]
+    PAYMENT_METHOD = [
+        ('Cash On Delivery', 'Cash On Delivery'),
+        ('BKash', 'BKash'),
+        ('Nagad', 'Nagad'),
+    ]
+    
+    first_name = models.CharField(max_length=255, null=True)
+    last_name = models.CharField(max_length=255, null=True)
+    email = models.EmailField(null=True)
+    phone = models.CharField(max_length=14, null=True)
+    billing_address = models.TextField(max_length=300, null=True)
+    shipping_address = models.TextField(max_length=300, null=True)
+    payment_method = models.CharField(max_length=15, null=True)
+    transaction_id = models.CharField(max_length=30, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField(validators=[Min(1)], default=1)
     status = models.CharField(choices=ORDER_STATUS, max_length=15, default='Pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def products(self):
+        return OrderProduct.objects.filter(order=self)
+    
+    def total(self):
+        total = 0
+        order_products = OrderProduct.objects.filter(order=self)
+        for order_product in order_products:
+            total += order_product.discount_price()
+        return total
+
+class OrderProduct(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(validators=[Min(1)], default=1)
+    price = models.FloatField(validators=[Min(0.0)])
+    discount = models.FloatField(validators=[Min(0.0), Max(100.0)], default=0)
+
+    def total(self):
+        return self.quantity * self.price
+
+    def discount_price(self):
+        return (self.quantity * self.price) - ((self.quantity * self.price * self.discount) / 100)

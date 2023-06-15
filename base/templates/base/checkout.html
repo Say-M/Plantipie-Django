@@ -6,31 +6,36 @@
 <section class="container">
   <h2 class="text-center my-5">Checkout</h2>
   <form action="" method="post">
+    {% csrf_token %}
     <div class="row flex-md-row flex-column-reverse">
       <div class="col-xl-8 col-md-7">
         <h5 class="mb-3">Personal Details</h5>
         <div class="row mb-4">
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label" for="firstName">First Name</label>
+              <label class="form-label" for="first_name">First Name</label>
               <input
                 type="text"
                 class="form-control"
-                name="firstName"
-                id="firstName"
+                name="first_name"
+                id="first_name"
                 placeholder="Enter first name"
+                value="{{user.first_name}}"
+                required
               />
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label" for="lastName">Last Name</label>
+              <label class="form-label" for="last_name">Last Name</label>
               <input
                 type="text"
                 class="form-control"
-                name="lastName"
-                id="lastName"
+                name="last_name"
+                id="last_name"
                 placeholder="Enter last name"
+                value="{{user.last_name}}"
+                required
               />
             </div>
           </div>
@@ -43,6 +48,8 @@
                 name="email"
                 id="email"
                 placeholder="Enter email address"
+                value="{{user.email}}"
+                required
               />
             </div>
           </div>
@@ -55,33 +62,41 @@
                 name="phone"
                 id="phone"
                 placeholder="Enter phone number"
+                value="{{user.profile.phone}}"
+                required
               />
             </div>
           </div>
           <div class="col-12">
             <div class="mb-3">
-              <label class="form-label" for="shippingAddress"
+              <label class="form-label" for="shipping_address"
                 >Shipping Address</label
               >
               <textarea
                 class="form-control"
-                name="shippingAddress"
-                id="shippingAddress"
+                name="shipping_address"
+                id="shipping_address"
                 placeholder="Enter shipping address"
-              ></textarea>
+                required
+              >
+{{user.profile.address}}</textarea
+              >
             </div>
           </div>
           <div class="col-12">
             <div class="mb-3">
-              <label class="form-label" for="billingAddress"
+              <label class="form-label" for="billing_address"
                 >Billing Address</label
               >
               <textarea
                 class="form-control"
-                name="billingAddress"
-                id="billingAddress"
+                name="billing_address"
+                id="billing_address"
                 placeholder="Enter shipping address"
-              ></textarea>
+                required
+              >
+{{user.profile.address}}</textarea
+              >
             </div>
           </div>
         </div>
@@ -90,9 +105,10 @@
           <input
             class="form-check-input"
             type="radio"
-            name="paymentMethod"
+            name="payment_method"
             id="bkash"
             value="BKash"
+            required
           />
           <label class="form-check-label" for="bkash">BKash</label>
         </div>
@@ -100,9 +116,10 @@
           <input
             class="form-check-input"
             type="radio"
-            name="paymentMethod"
+            name="payment_method"
             id="nagad"
             value="Nagad"
+            required
           />
           <label class="form-check-label" for="nagad">Nagad</label>
         </div>
@@ -110,70 +127,129 @@
           <input
             class="form-check-input"
             type="radio"
-            name="paymentMethod"
+            name="payment_method"
             id="cod"
             value="Cash On Delivary"
+            required
           />
           <label class="form-check-label" for="cod">Cash On Delivary</label>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label" for="transactionId"
+            <div class="mb-3" id="transaction_id_elemt">
+              <label class="form-label" for="transaction_id"
                 >Transaction ID</label
               >
               <input
                 type="text"
                 class="form-control"
-                name="transactionId"
-                id="transactionId"
+                name="transaction_id"
+                id="transaction_id"
                 placeholder="Enter transaction ID"
+                required
               />
             </div>
           </div>
         </div>
+        {% if user.cart_count %}
         <button class="btn btn-theme mb-5" type="submit">
           Continue To Checkout
         </button>
+        {% else %}
+        <div class="alert alert-danger">
+          <p class="mb-0"><strong>Warning!</strong> Your cart is empty.</p>
+        </div>
+        {% endif %}
       </div>
       <div class="col-xl-4 col-md-5">
         <h5 class="mb-3">Your Plants</h5>
         <div class="products mb-4 mb-md-0">
-          {% load static %}
+          {% if user.cart_count %} {% load static %}
           <ul>
+            {% for cart in user.carts %}
             <li>
               <div class="image">
-                <img src="{% static '/assets/images/product-1.jpg' %}" alt="" />
+                <img
+                  src="/{{cart.product.featured_image}}"
+                  alt="{{cart.product.name}}"
+                />
               </div>
               <div>
                 <h6>
-                  <a href="{% url 'product_detail' '1' %}">Borosil Paper Cup</a>
-                  <span>
+                  <a href="{% url 'product_detail' cart.product.id %}"
+                    >{{cart.product.name}}</a
+                  >
+                  <a href="">
                     <i class="fa-solid fa-close"></i>
-                  </span>
+                  </a>
                 </h6>
                 <div class="price">
-                  <span>&#2547; 100</span
-                  ><span class="available">In Stock (24 Items)</span>
+                  <span
+                    >&#2547; {% load customer_filter %}
+                    {{cart.product.price|calculateDiscount:cart.product.discount}}</span
+                  >
+                  <span class="available"
+                    >In Stock ({{cart.product.stock}}
+                    <!-- Divider -->
+                    Item{% if cart.product.stock > 1%}s{% endif %})
+                  </span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="quantity">
-                    <span>
+                    <a href="{% url 'addToCart' cart.product.id %}?quantity=-1">
                       <i class="fa-solid fa-minus"></i>
-                    </span>
-                    <span>2</span>
-                    <span>
+                    </a>
+                    <span>{{cart.quantity}}</span>
+                    <a href="{% url 'addToCart' cart.product.id %}?quantity=+1">
                       <i class="fa-solid fa-plus"></i>
-                    </span>
+                    </a>
                   </div>
-                  <h5 class="mb-0 fw-bold">&#2547; 200</h5>
+                  <h5 class="mb-0 fw-bold">&#2547; {{cart.total}}</h5>
                 </div>
               </div>
             </li>
+            {% endfor %}
           </ul>
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Total</h5>
+            <p class="mb-0">
+              <strong>&#2547; {{user.total_cart_price}}</strong>
+            </p>
+          </div>
+          {% else %}
+          <div class="empty-cart">
+            {% load static %}
+            <img
+              src="{% static '/assets/images/empty_cart.png' %}"
+              alt=""
+              class="img-fluid"
+            />
+            <h5>Your cart is empty!</h5>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
   </form>
 </section>
+{% endblock %} {% block script %}
+<script>
+  const transaction_id_elemt = document.getElementById('transaction_id_elemt')
+  const transaction_id_input = document.getElementById('transaction_id')
+  const payment_method_elemts = document.querySelectorAll(
+    'input[name="payment_method"]'
+  )
+  payment_method_elemts.forEach((elem) => {
+    elem.addEventListener('change', (e) => {
+      if (e.target.value === 'Cash On Delivary') {
+        transaction_id_elemt.classList.add('d-none')
+        transaction_id_input.removeAttribute('required')
+        transaction_id_input.value = ''
+      } else {
+        transaction_id_elemt.classList.remove('d-none')
+        transaction_id_input.setAttribute('required', true)
+      }
+    })
+  })
+</script>
 {% endblock %}

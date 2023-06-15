@@ -43,7 +43,11 @@
                     alt="{{plant.plant_name}}"
                   />
                   <div>
-                    <h6>{{plant.name}}</h6>
+                    <h6>
+                      <a href="{% url 'product_detail' plant.id %}"
+                        >{{plant.name}}</a
+                      >
+                    </h6>
                     <p><strong>Stock : </strong> {{plant.stock}}</p>
                   </div>
                 </div>

@@ -1,0 +1,60 @@
+@import '../variables', '../mixins';
+
+.order-detail {
+  max-width: 1000px;
+  width: 100%;
+  margin: 5rem auto;
+  border: 1px solid $border;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  @media print {
+    min-width: 800px;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0 auto;
+  }
+  h5 {
+    margin-bottom: 1rem;
+  }
+  .invoice-information {
+    margin-bottom: 2rem;
+    p {
+      margin-bottom: 0.25rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      strong {
+        font-weight: 500;
+      }
+    }
+  }
+  .biller-information {
+    @include flex($gap: 1rem);
+    margin-bottom: 2rem;
+    max-width: 700px;
+    width: 100%;
+    img {
+      border-radius: 0.5rem;
+      width: 4.5rem;
+      height: 4.5rem;
+      object-fit: cover;
+    }
+    & > div {
+      h6 {
+        font-weight: 700;
+      }
+      p {
+        margin-bottom: 0.25rem;
+        color: lighten($color: $black, $amount: 30%);
+        font-size: 0.875rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        strong {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

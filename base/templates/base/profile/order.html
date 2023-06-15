@@ -12,26 +12,31 @@ Plantipie{% endblock %}
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">#</th>
               <th scope="col">Order ID</th>
-              <th scope="col" class="text-end">Order Date</th>
+              <th scope="col">Order Date</th>
               <th scope="col">Order Status</th>
               <th scope="col" class="text-end">Total</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            {% for i in range %}
+            {% for order in orders %}
             <tr>
-              <th scope="row">{{ i }}</th>
-              <td>INV33221{{ i }}</td>
-              <td class="text-end">12 Jan 2023</td>
-              <td>
-                <span class="badge bg-success">Delivered</span>
+              <td class="align-middle">INV-{{ order.id }}</td>
+              <td class="align-middle">{{ order.created_at }}</td>
+              <td class="align-middle">
+                <span
+                  class="badge bg-{% if order.status == 'Pending' %}warning{% elif order.status == 'Canceled' %}danger{% else %}success{% endif %}"
+                  >{{ order.status }}</span
+                >
               </td>
-              <td class="text-end">&#2547; 1000</td>
-              <td>
-                <a href="/orders/{{ i }}" class="btn btn-sm btn-theme">View</a>
+              <td class="text-end align-middle">&#2547; 1000</td>
+              <td class="align-middle align-middle">
+                <a
+                  href="{% url 'order_detail' order.id %}"
+                  class="btn btn-sm btn-theme"
+                  ><i class="fa-solid fa-eye text-sm"></i
+                ></a>
               </td>
             </tr>
             {% endfor %}
