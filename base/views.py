@@ -20,13 +20,21 @@ def homePage(request):
 
 def productPage(request):
     plants=Product.objects.all()
-    context={'plants':plants}
+    paginator=Paginator(plants,12)
+    page_number=request.GET.get('page')
+    plantsFinal=paginator.get_page(page_number)
+    totalPageNumber=plantsFinal.paginator.num_pages
+    context={
+        'plants':plantsFinal,
+        'lastpage':totalPageNumber,
+        'totalPageList':[n+1 for n in range(totalPageNumber)],
+        }
     return render(request, 'base/product.html', context)
 
 @login_required(login_url="/login/")
 def productDetailPage(request, pk):
     plant=Product.objects.get(id=pk)
-    recent_products = Product.objects.order_by('-created_at')[:4]
+    recent_products = Product.objects.order_by('-created_at').exclude(id=pk)[:4]
     extraImages=AdditionalImage.objects.filter(product=plant)
     context={"plant":plant,"extraImages":extraImages,"recent_products":recent_products}
     return render(request, 'base/product_detail.html',context)
@@ -110,9 +118,6 @@ def orderPage(request):
 
 @login_required(login_url="/login/")
 def adminProductPage(request):
-    # if(request.method=="GET"):
-    #     print(request.GET["name"])
-    #     print(request.GET["email"])
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
     if request.method=="POST":

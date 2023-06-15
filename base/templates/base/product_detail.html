@@ -29,7 +29,13 @@
         <h4>{{plant.name}}</h4>
         <div class="stock">
           <span>Availability:</span>
-          <span class="available">In Stock ({{plant.stock}} items)</span>
+          {% if plant.stock == 0 %}
+            <span class="unavailable">Out of stock ({{plant.stock}} item)</span>
+          {% elif plant.stock == 1 %}
+            <span class="available">In stock ({{plant.stock}} item)</span>
+          {% else %}
+            <span class="available">In stock ({{plant.stock}} items) </span>
+          {% endif %}
         </div>
         <div class="price">
           <h5>&#2547; 
