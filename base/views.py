@@ -7,6 +7,7 @@ from .models import Product, Profile, AdditionalImage, Cart
 from django.db.models import Q
 from django.contrib import messages
 from django.db.models.functions import Lower
+from django.core.paginator import Paginator
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
 
@@ -119,18 +120,22 @@ def adminProductPage(request):
     #     print(request.GET["email"])
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
-    plants=Product.objects.all()
-    context={'plants':plants}
-    return render(request, 'base/profile/product.html', context)
-
-@login_required(login_url="/login/")
-def searchProduct(request):
-    # search_query=request.GET['query']
-    search_query=request.POST.get('query')
-    plants=Product.objects.all()
-    if search_query:
-        plants=plants.annotate(lower_name=Lower('name')).filter(lower_name__icontains=search_query.lower())
-    context={'plants':plants}
+    if request.method=="POST":
+        search_query=request.POST.get('query')
+        plants=Product.objects.all()
+        if search_query:
+            plants=plants.annotate(lower_name=Lower('name')).filter(lower_name__icontains=search_query.lower())
+    else:
+        plants=Product.objects.all()
+    paginator=Paginator(plants,1)
+    page_number=request.GET.get('page')
+    plantsFinal=paginator.get_page(page_number)
+    totalPageNumber=plantsFinal.paginator.num_pages
+    context={
+        'plants':plantsFinal,
+        'lastpage':totalPageNumber,
+        'totalPageList':[n+1 for n in range(totalPageNumber)],
+        }
     return render(request, 'base/profile/product.html', context)
 
 @login_required(login_url="/login/")
