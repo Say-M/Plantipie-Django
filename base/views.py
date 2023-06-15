@@ -14,7 +14,7 @@ from .utils.upload_file import upload_file
 # Create your views here.
 
 def homePage(request):
-    plants=Product.objects.all()
+    plants=Product.objects.order_by('-created_at')[:12]
     return render(request, 'base/home.html', {"plants":plants})
 
 
