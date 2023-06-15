@@ -6,6 +6,21 @@ Plantipie{% endblock %}
 {% block content %}
 <section class="container">
   <div class="order-detail">
+    {% if user.profile.role == 'Seller' %}
+    <div class="no-print mb-5">
+      <h5>Change Status</h5>
+      <form action="" style="max-width: 400px" method="post">
+        {% csrf_token %}
+        <select class="form-select" name="status" value="{{order.status}}">
+          <option value="" disabled>--Select--</option>
+          <option value="Pending">Pending</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cenceled">Cenceled</option>
+        </select>
+        <button class="btn btn-sm btn-theme mt-3" type="submit">Update</button>
+      </form>
+    </div>
+    {% endif %}
     <div class="invoice-information">
       <p><strong>Invoice ID - </strong> INV-{{order.id}}</p>
       <p><strong>Invoice Date - </strong> {{order.created_at}}</p>

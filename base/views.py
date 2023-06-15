@@ -151,6 +151,14 @@ def orderPage(request):
 def orderDetailPage(request, pk):
     order = Order.objects.get(id=pk)
     context = {"order": order}
+
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        print(status)
+        order.status = status
+        order.save()
+        return redirect('order_detail', pk=pk)
+
     return render(request, 'base/profile/order_detail.html', context)
 
 
