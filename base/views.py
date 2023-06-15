@@ -4,7 +4,9 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import Product, Profile, AdditionalImage, Cart
+from django.db.models import Q
 from django.contrib import messages
+from django.db.models.functions import Lower
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
 
@@ -63,6 +65,15 @@ def signupPage(request):
         username=request.POST.get("username")
         password=request.POST.get("password")
         # print(first_name, last_name, email, username, password)
+        if User.objects.filter(Q(username=username) & Q(email=email)).exists():
+            messages.error(request, "Username or email is already taken, provide differents one")
+            return redirect("signup")
+        if User.objects.filter(username=username).exists():
+            messages.error(request,"Username is already taken, provide different one")
+            return redirect('signup')
+        if User.objects.filter(email=email).exists():
+            messages.error(request,"Email is already taken, provide different one")
+            return redirect('signup')
         my_user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
         profile = Profile.objects.create(user=my_user)
         profile.save()
@@ -103,9 +114,22 @@ def orderPage(request):
 
 @login_required(login_url="/login/")
 def adminProductPage(request):
+    # if(request.method=="GET"):
+    #     print(request.GET["name"])
+    #     print(request.GET["email"])
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
     plants=Product.objects.all()
+    context={'plants':plants}
+    return render(request, 'base/profile/product.html', context)
+
+@login_required(login_url="/login/")
+def searchProduct(request):
+    # search_query=request.GET['query']
+    search_query=request.POST.get('query')
+    plants=Product.objects.all()
+    if search_query:
+        plants=plants.annotate(lower_name=Lower('name')).filter(lower_name__icontains=search_query.lower())
     context={'plants':plants}
     return render(request, 'base/profile/product.html', context)
 

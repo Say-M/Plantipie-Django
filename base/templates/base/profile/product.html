@@ -11,14 +11,17 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
       <div
         class="d-flex justify-content-between align-items-center flex-wrap mb-4 gap-4"
       >
+      <form method="POST" action="{% url 'search_product' %}">
+        {% csrf_token %}
         <div style="max-width: 15rem; width: 100%">
           <div class="input-group input-group-sm">
-            <input class="form-control" placeholder="Search..." />
-            <span class="input-group-text">
+            <input class="form-control" name="query" placeholder="Search..." />
+            <button type="submit"  class="input-group-text">
               <i class="fas fa-search"></i>
-            </span>
+            </a>
           </div>
         </div>
+      </form>
         <a href="{% url 'admin_product_add' %}" class="btn btn-sm btn-theme"
           >Add Product</a
         >
@@ -27,7 +30,7 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Producct</th>
+              <th scope="col">Product</th>
               <th scope="col" class="text-end">Original Price</th>
               <th scope="col" class="text-end">Discount Price</th>
               <th scope="col" class="text-end">Discount</th>

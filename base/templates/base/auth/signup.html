@@ -8,6 +8,13 @@
     {% csrf_token %}
     <div>
       <h4 class="mb-4">Create an account</h4>
+      {% if messages %}
+        <div class="alert alert-danger" role="alert">
+          {% for message in messages %}
+          <p class="mb-0">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
       <div class="form-group mb-3">
         <label class="mb-1" for="first_name">First name</label>
         <input
