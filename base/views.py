@@ -21,7 +21,6 @@ def homePage(request):
 def productPage(request):
     plants=Product.objects.all()
     context={'plants':plants}
-    # context=""
     return render(request, 'base/product.html', context)
 
 @login_required(login_url="/login/")
