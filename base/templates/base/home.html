@@ -21,22 +21,23 @@ Plantipie{%endblock %}
   <div class="container">
     <h3>Our Products</h3>
     <div class="row">
-      {% for i in range %}
+      {% for i in plants %}
       <div class="col-xl-3 col-lg-4 col-md-6">
-        <a href="{% url 'product_detail' i %}" class="product">
+        <a href="{% url 'product_detail' i.id %}" class="product">
           <div class="image">
             <img
               class="img-fluid"
-              src="{% static '/assets/images/product-1.jpg' %}"
-              alt=""
+              src="/{{i.featured_image}}"
+              alt="/{{i.plant_name}}"
             />
           </div>
           <div class="info">
             <div class="price">
-              <h5>&#2547; 576</h5>
-              <span>&#2547; 600</span>
+              <h5>&#2547; {% load customer_filter %}
+                {{i.price|calculateDiscount:i.discount}}</h5>
+              <span>&#2547; {{i.price}}</span>
             </div>
-            <h6>Magni Dolores Eosquies</h6>
+            <h6>{{i.name}}</h6>
             <div class="other">
               <span><i class="fa-solid fa-star"></i> 5.0</span>
               <!--update the 'i' below with product id pls-->

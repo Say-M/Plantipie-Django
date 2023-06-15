@@ -14,27 +14,23 @@ from .utils.upload_file import upload_file
 # Create your views here.
 
 def homePage(request):
-    return render(request, 'base/home.html', {'range': range(1, 13),'curUser':""})
-
-# def productPage(request):
-#     return render(request, 'base/product.html', {'range': range(1, 13)})
-
-def productDetailPage(request, id):
-    return render(request, 'base/product_detail.html', {'range': range(1, 5)})
+    plants=Product.objects.all()
+    return render(request, 'base/home.html', {"plants":plants})
 
 
 def productPage(request):
-    # plants=Plant.objects.all()
-    # context={'plants':plants}
-    context=""
+    plants=Product.objects.all()
+    context={'plants':plants}
+    # context=""
     return render(request, 'base/product.html', context)
 
-# @login_required(login_url="/login/")
-# def productDetailPage(request, pk):
-#     context=""
-#     # plant=get_object_or_404(Plant,id=pk)
-#     # context={"plant":plant}
-#     return render(request, 'base/product_detail.html',context)
+@login_required(login_url="/login/")
+def productDetailPage(request, pk):
+    plant=Product.objects.get(id=pk)
+    recent_products = Product.objects.order_by('-created_at')[:4]
+    extraImages=AdditionalImage.objects.filter(product=plant)
+    context={"plant":plant,"extraImages":extraImages,"recent_products":recent_products}
+    return render(request, 'base/product_detail.html',context)
 
 @login_required(login_url="/login/")
 def checkoutPage(request):
