@@ -141,8 +141,8 @@ def adminProductAddPage(request):
         name=request.POST.get('name')
         description=request.POST.get('description')
         price=request.POST.get('price')
-        discount=request.POST.get('discount')
-        stock=request.POST.get('stock')
+        discount=request.POST.get('discount') if request.POST.get('discount') else 0
+        stock=request.POST.get('stock') if request.POST.get('stock') else 0
         featured_image=request.FILES.get('featured_image')
         additional_images=request.FILES.getlist('additional_images')
         if(featured_image):
@@ -173,19 +173,19 @@ def editProduct(request,pk):
         plant.name=request.POST.get('name')
         plant.description=request.POST.get('description')
         plant.price=request.POST.get('price')
-        plant.discount=request.POST.get('discount')
-        plant.stock=request.POST.get('stock')
+        plant.discount=request.POST.get('discount') if request.POST.get('discount') else 0
+        plant.stock=request.POST.get('stock') if request.POST.get('stock') else 0
         updated_featured_image=request.FILES.get('featured_image')
         if(updated_featured_image):
-            delete_file(plant.featured_image.path)
+            delete_file(str(plant.featured_image))
             new_featured_image=upload_file('static/assets/images', 'static/assets/images', updated_featured_image)
             plant.featured_image=new_featured_image
-        updated_additional_iamges=request.FILES.getlist('additional_images')
-        if(updated_additional_iamges):
+        updated_additional_images=request.FILES.getlist('additional_images')
+        if(updated_additional_images):
             for old_img in additional_images:
-                delete_file(str(old_img.image.path))
+                delete_file(str(old_img.image))
                 old_img.delete()
-            for image in updated_additional_iamges:
+            for image in updated_additional_images:
                 update_image = upload_file('static/assets/images', 'static/assets/images', image)
                 additional_image = AdditionalImage(product=plant, image=update_image)
                 additional_image.save()
@@ -196,19 +196,40 @@ def editProduct(request,pk):
 @login_required(login_url="/login/")
 def deleteProduct(request,pk):
     plant=Product.objects.get(id=pk)
-    delete_file(plant.featured_image.path)
+    delete_file(str(plant.featured_image))
     additional_image=AdditionalImage.objects.filter(product=plant)
     for add_img in additional_image:
-        delete_file(str(add_img.image.path))
+        delete_file(str(add_img.image))
     plant.delete()
     return redirect('admin_product')
 
 @login_required(login_url="/login/")
 def addToCart(request,pk):
+    quantity=1
+    if(request.method == "GET") :
+        quantity=int(request.GET.get('quantity'))
+
     plant=Product.objects.get(id=pk)
-    cart=Cart(
-        user=request.user,
-        product=plant,
-        quantity=1
-    )
-    cart.save()
+
+    if(quantity == 0):
+        cart = Cart.objects.get(product__id=pk)
+        if(cart):
+            plant.stock += cart.quantity
+            plant.save()
+            cart.delete()
+        return redirect('home')
+
+    if(plant.stock < quantity):
+        messages.error(request, 'Not enough stock available')
+        return redirect('product_detail', pk=pk)
+    
+    plant.stock -= quantity
+    plant.save()
+
+    obj, cart = Cart.objects.update_or_create(user=request.user, product=plant)
+    obj.quantity += quantity
+    if(obj.quantity == 0):
+        obj.delete()
+    else:
+        obj.save()
+    return redirect('home')

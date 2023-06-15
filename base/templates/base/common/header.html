@@ -10,7 +10,7 @@
         {% if request.user.is_authenticated %}
         <!-- Divider -->
         {% if request.user.is_authenticated %}
-        <div data-item="0" id="cart-btn" class="cart-btn">
+        <div data-item="{{ user.cart_count }}" id="cart-btn" class="cart-btn">
           <i class="fa-solid fa-cart-shopping"></i>
         </div>
         {% endif %}
@@ -25,8 +25,7 @@
             src="/{{ user.profile.avatar }}"
             alt="{{ user.first_name }} {{ user.last_name }}"
           />
-          {% else %}
-          {% load static %}
+          {% else %} {% load static %}
           <img
             src="{% static '/assets/images/default-user.png' %}"
             alt="{{ user.first_name }} {{ user.last_name }}"
@@ -54,104 +53,71 @@
     <span id="cart-close-btn"><i class="fa-solid fa-times"></i></span>
   </div>
   <div class="cart-body">
-    {% load static %}
+    {% if request.user.cart_count %}
     <ul>
+      {% for cart in request.user.carts %}
       <li>
         <div class="image">
-          <img src="{% static '/assets/images/product-1.jpg' %}" alt="" />
+          <img
+            src="/{{cart.product.featured_image}}"
+            alt="{{cart.product.name}}"
+          />
         </div>
         <div>
           <h6>
-            <a href="{% url 'product_detail' '1' %}">Borosil Paper Cup</a>
-            <span>
+            <span>{{cart.product.name}}</span>
+            <a href="{% url 'addToCart' cart.product.id %}?quantity=0">
               <i class="fa-solid fa-close"></i>
-            </span>
+            </a>
           </h6>
           <div class="price">
-            <span>&#2547; 100</span
-            ><span class="available">In Stock (24 Items)</span>
+            <span
+              >&#2547; {% load customer_filter %}
+              {{cart.product.price|calculateDiscount:cart.product.discount}}</span
+            >
+            <span class="available"
+              >In Stock ({{cart.product.stock}}
+              <!-- Divider -->
+              Item{% if cart.product.stock > 1%}s{% endif %})
+            </span>
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <div class="quantity">
-              <span>
+              <a href="{% url 'addToCart' cart.product.id %}?quantity=-1">
                 <i class="fa-solid fa-minus"></i>
-              </span>
-              <span>2</span>
-              <span>
+              </a>
+              <span>{{cart.quantity}}</span>
+              <a href="{% url 'addToCart' cart.product.id %}?quantity=+1">
                 <i class="fa-solid fa-plus"></i>
-              </span>
+              </a>
             </div>
-            <h5 class="mb-0 fw-bold">&#2547; 200</h5>
+            <h5 class="mb-0 fw-bold">&#2547; {{cart.total}}</h5>
           </div>
         </div>
       </li>
-      <li>
-        <div class="image">
-          <img src="{% static '/assets/images/product-2.jpg' %}" alt="" />
-        </div>
-        <div>
-          <h6>
-            <a href="{% url 'product_detail' '1' %}">Borosil Paper Cup</a>
-            <span>
-              <i class="fa-solid fa-close"></i>
-            </span>
-          </h6>
-          <div class="price">
-            <span>&#2547; 100</span
-            ><span class="available">In Stock (24 Items)</span>
-          </div>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="quantity">
-              <span>
-                <i class="fa-solid fa-minus"></i>
-              </span>
-              <span>2</span>
-              <span>
-                <i class="fa-solid fa-plus"></i>
-              </span>
-            </div>
-            <h5 class="mb-0 fw-bold">&#2547; 200</h5>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="image">
-          <img src="{% static '/assets/images/product-3.jpg' %}" alt="" />
-        </div>
-        <div>
-          <h6>
-            <a href="{% url 'product_detail' '1' %}">Borosil Paper Cup</a>
-            <span>
-              <i class="fa-solid fa-close"></i>
-            </span>
-          </h6>
-          <div class="price">
-            <span>&#2547; 100</span
-            ><span class="available">In Stock (24 Items)</span>
-          </div>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="quantity">
-              <span>
-                <i class="fa-solid fa-minus"></i>
-              </span>
-              <span>2</span>
-              <span>
-                <i class="fa-solid fa-plus"></i>
-              </span>
-            </div>
-            <h5 class="mb-0 fw-bold">&#2547; 200</h5>
-          </div>
-        </div>
-      </li>
+      {% endfor %}
     </ul>
+    {% else %}
+    <div class="empty-cart">
+      {% load static %}
+      <img
+        src="{% static '/assets/images/empty_cart.png' %}"
+        alt=""
+        class="img-fluid"
+      />
+      <h5>Your cart is empty!</h5>
+    </div>
+    {% endif %}
   </div>
+  {% if user.cart_count %}
   <div class="cart-footer">
     <h5 class="d-flex justify-content-between mb-3">
       <span class="fw-normal">Total :</span>
-      <span class="fw-bold">&#2547; 600</span>
+      <span class="fw-bold">&#2547; {{user.total_cart_price}}</span>
     </h5>
     <a href="{% url 'checkout' %}" class="btn btn-theme" style="width: 100%"
       >Checkout</a
     >
   </div>
+  {% endif %}
 </aside>

@@ -87,9 +87,10 @@
   padding: 0.25rem;
   border-radius: 0.25rem;
   border: 1px solid $border;
-  span {
+  a {
     &:first-child,
     &:last-child {
+      color: initial;
       height: 1.75rem;
       width: 1.75rem;
       line-height: 1.75rem;

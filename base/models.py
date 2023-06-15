@@ -28,11 +28,30 @@ class Profile(models.Model):
     phone = models.CharField(max_length=14, default='')
     avatar = models.ImageField(upload_to='assets/images', null=True)
     role = models.CharField(choices=USER_ROLE, max_length=15, default='Customer')
+    
+def carts(self):
+    return Cart.objects.filter(user=self)
+User.add_to_class('carts', carts)
+
+def cart_count(self):
+    return Cart.objects.filter(user=self).count()
+User.add_to_class('cart_count', cart_count)
+
+def total_cart_price(self):
+    total = 0
+    carts = Cart.objects.filter(user=self)
+    for cart in carts:
+        total += cart.total()
+    return total
+User.add_to_class('total_cart_price', total_cart_price)
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(validators=[Min(1)], default=1)
+
+    def total(self):
+        return (self.quantity * self.product.price) - ((self.quantity * self.product.price * self.product.discount) / 100)
 
 class Order(models.Model):
     ORDER_STATUS = [

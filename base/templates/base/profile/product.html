@@ -1,7 +1,6 @@
 {% extends '../common/main.html' %}
 <!-- Divider -->
-{% block title %}{{ user.first_name }} {{ user.last_name }} |
-Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
+{% block title %}All Products | Plantipie{% endblock %}
 <!-- Divider -->
 {% block content %}
 <section class="container">
@@ -34,7 +33,6 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
               <th scope="col" class="text-end">Original Price</th>
               <th scope="col" class="text-end">Discount Price</th>
               <th scope="col" class="text-end">Discount</th>
-              <th scope="col" class="text-end">Stock</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
@@ -43,26 +41,35 @@ Plantipie{%comment%}<!-- Divider -->{%endcomment%}{% endblock %}
             <tr>
               <td class="align-middle">
                 <div class="table-image">
-                  
                   <img
                     src="/{{plant.featured_image}}"
                     alt="{{plant.plant_name}}"
                   />
                   <div>
                     <h6>{{plant.name}}</h6>
-                    <p><strong>Quantity : </strong> {{plant.stock}}</p>
+                    <p><strong>Stock : </strong> {{plant.stock}}</p>
                   </div>
                 </div>
               </td>
               <td class="align-middle text-end">&#2547; {{plant.price}}</td>
-              {% load customer_filter %}
-              <td class="align-middle text-end">{{plant.price|calculateDiscount:plant.discount}}</td>
+              <td class="align-middle text-end">
+                {% load customer_filter %}
+                {{plant.price|calculateDiscount:plant.discount}}
+              </td>
               <td class="align-middle text-end">{{plant.discount}}</td>
-              <td class="align-middle text-end">{{plant.stock}}</td>
               <td class="align-middle">
                 <div class="d-flex gap-3">
-                  <a href="{% url 'edit_product' plant.id %}" class="btn btn-sm btn-theme">Edit</a>
-                  <a href="{% url 'delete_view' plant.id %}" class="btn btn-sm btn-danger">Delete</a>
+                  <a
+                    href="{% url 'edit_product' plant.id %}"
+                    class="btn btn-sm btn-theme"
+                  >
+                    <i class="fa-solid fa-pen"></i
+                  ></a>
+                  <a
+                    href="{% url 'delete_view' plant.id %}"
+                    class="btn btn-sm btn-danger"
+                    ><i class="fa-solid fa-trash"></i
+                  ></a>
                 </div>
               </td>
             </tr>
