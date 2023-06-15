@@ -16,18 +16,18 @@ from .utils.upload_file import upload_file
 def homePage(request):
     return render(request, 'base/home.html', {'range': range(1, 13),'curUser':""})
 
-def productPage(request):
-    return render(request, 'base/product.html', {'range': range(1, 13)})
+# def productPage(request):
+#     return render(request, 'base/product.html', {'range': range(1, 13)})
 
 def productDetailPage(request, id):
     return render(request, 'base/product_detail.html', {'range': range(1, 5)})
 
 
-# def productPage(request):
-#     # plants=Plant.objects.all()
-#     # context={'plants':plants}
-#     context=""
-#     return render(request, 'base/product.html', context)
+def productPage(request):
+    # plants=Plant.objects.all()
+    # context={'plants':plants}
+    context=""
+    return render(request, 'base/product.html', context)
 
 # @login_required(login_url="/login/")
 # def productDetailPage(request, pk):
