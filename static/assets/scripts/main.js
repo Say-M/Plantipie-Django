@@ -1,10 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ! cart
+  const cart_aside = new URLSearchParams(window.location.search).get(
+    'cart_aside'
+  )
   const cartBtn = document.querySelector('#cart-btn')
   const cartWrapper = document.querySelector('#cart-wrapper')
   const cartCloseBtn = document.querySelector('#cart-close-btn')
   const overlayElement = document.createElement('div')
   overlayElement.classList.add('overlay')
+
+  if (cart_aside) {
+    cartWrapper.classList.add('show')
+  }
 
   cartBtn.addEventListener('click', () => {
     cartWrapper.classList.add('show')

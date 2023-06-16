@@ -19,10 +19,18 @@
       display: flex;
       overflow: auto;
       width: 100%;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+      padding-bottom: 0.25rem;
       &::-webkit-scrollbar {
-        display: none;
+        height: 0.375rem;
+        border-radius: 0.25rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: $primary;
+        border-radius: 0.25rem;
       }
       div {
         @include flex($gap: 1rem);

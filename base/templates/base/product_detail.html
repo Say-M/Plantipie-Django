@@ -7,93 +7,66 @@
       <div class="left">
         <div class="main-image">
           {% load static %}
-          <img src="{% static '/assets/images/product-1.jpg' %}" alt="" />
+          <img src="/{{plant.featured_image}}" alt="{{plant.name}}" />
         </div>
         <div class="sub-images">
           <div>
-            <div class="active">
-              <img src="{% static '/assets/images/product-1.jpg' %}" alt="" />
+            {% for img in extraImages %} {% if forloop.first %}
+            <div class="active image-item">
+              <img
+                src="/{{img.image}}"
+                alt="Additional image {{forloop.counter}}"
+              />
             </div>
-            <div>
-              <img src="{% static '/assets/images/product-2.jpg' %}" alt="" />
+            {% else %}
+            <div class="image-item">
+              <img
+                src="/{{img.image}}"
+                alt="Additional image {{forloop.counter}}"
+              />
             </div>
-            <div>
-              <img src="{% static '/assets/images/product-3.jpg' %}" alt="" />
-            </div>
-            <div>
-              <img src="{% static '/assets/images/product-2.jpg' %}" alt="" />
-            </div>
-            <div>
-              <img src="{% static '/assets/images/product-3.jpg' %}" alt="" />
-            </div>
-            <div>
-              <img src="{% static '/assets/images/product-2.jpg' %}" alt="" />
-            </div>
-            <div>
-              <img src="{% static '/assets/images/product-3.jpg' %}" alt="" />
-            </div>
-            <div>
-              <img src="{% static '/assets/images/product-2.jpg' %}" alt="" />
-            </div>
-            <div>
-              <img src="{% static '/assets/images/product-3.jpg' %}" alt="" />
-            </div>
+            {% endif %} {% endfor %}
           </div>
         </div>
       </div>
       <div class="right">
-        <h4>Magni Dolores Eosquies</h4>
+        <h4>{{plant.name}}</h4>
         <div class="stock">
           <span>Availability:</span>
-          <span class="available">In Stock (20 item)</span>
+          <span class="available">In Stock ({{plant.stock}} items)</span>
         </div>
         <div class="price">
-          <h5>&#2547; 576</h5>
-          <span>&#2547; 600</span>
+          <h5>
+            &#2547; {% load customer_filter %}
+            {{plant.price|calculateDiscount:plant.discount}}
+          </h5>
+          <span>&#2547; {{plant.price}}</span>
         </div>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt
-          molestiae voluptatibus harum obcaecati blanditiis? Voluptates voluptas
-          vero reiciendis vitae odio.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Necessitatibus obcaecati eaque cum optio quae dolorem sapiente,
-          numquam aperiam voluptatibus corrupti ipsum quod vel dignissimos
-          suscipit aliquid! Ratione, labore! Laboriosam, consequuntur!
-        </p>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia
-          consequatur iste pariatur dignissimos ipsa, natus error amet quidem
-          dicta nobis recusandae blanditiis hic! Officiis, voluptates enim ab,
-          sit aperiam aut repellat ex quae doloribus, reiciendis vitae. Quod
-          quasi, totam ullam maiores libero inventore harum nam nihil atque
-          dicta magnam provident!
-        </p>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt
-          molestiae voluptatibus harum obcaecati blanditiis? Voluptates voluptas
-          vero reiciendis vitae odio.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Necessitatibus obcaecati eaque cum optio quae dolorem sapiente,
-          numquam aperiam voluptatibus corrupti ipsum quod vel dignissimos
-          suscipit aliquid! Ratione, labore! Laboriosam, consequuntur!
-        </p>
+        <p>{{plant.description}}</p>
         <div class="d-flex align-items-center gap-3">
+          {% if cart_quantity %}
           <div class="quantity">
-            <span>
+            <a
+              href="{% url 'addToCart' plant.id %}?quantity=-1&next={{request.path}}"
+            >
               <i class="fa-solid fa-minus"></i>
-            </span>
-            <span>1</span>
-            <span>
+            </a>
+            <span>{{cart_quantity}}</span>
+            <a
+              href="{% url 'addToCart' plant.id %}?quantity=+1&next={{request.path}}"
+            >
               <i class="fa-solid fa-plus"></i>
-            </span>
+            </a>
           </div>
-          <button class="btn btn-theme rounded-1">
+          {% endif %} {% if not cart_quantity %}
+          <a
+            a
+            href="{% url 'addToCart' plant.id %}?new=True&next={{request.path}}"
+            class="btn btn-theme rounded-1"
+          >
             <i class="fa-solid fa-shopping-cart"></i> Add to Cart
-          </button>
+          </a>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -104,24 +77,26 @@
     <div class="container">
       <h3>Recent Products</h3>
       <div class="row">
-        {% for i in range %}
+        {% for rec in recent_products %}
         <div class="col-xl-3 col-lg-4 col-md-6">
-          <a href="{% url 'product_detail' i %}" class="product">
+          <a href="{% url 'product_detail' rec.id %}" class="product">
             <div class="image">
               <img
                 class="img-fluid"
-                src="{% static '/assets/images/product-1.jpg' %}"
-                alt=""
+                src="/{{rec.featured_image}}"
+                alt="{{rec.name}}"
               />
             </div>
             <div class="info">
               <div class="price">
-                <h5>&#2547; 576</h5>
-                <span>&#2547; 600</span>
+                <h5>
+                  &#2547; {% load customer_filter %}
+                  {{rec.price|calculateDiscount:rec.discount}}
+                </h5>
+                <span>&#2547; {{rec.price}}</span>
               </div>
-              <h6>Magni Dolores Eosquies</h6>
+              <h6>{{rec.name}}</h6>
               <div class="other">
-                <span><i class="fa-solid fa-star"></i> 5.0</span>
                 <span><i class="fa-solid fa-shopping-cart"></i></span>
               </div>
             </div>
@@ -132,4 +107,18 @@
     </div>
   </div>
 </section>
+{% endblock %} {% block script %}
+<script>
+  const mainImage = document.querySelector('.main-image img')
+  const imageItems = document.querySelectorAll('.image-item')
+  imageItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      mainImage.src = item.querySelector('img').src
+      imageItems.forEach((item) => {
+        item.classList.remove('active')
+      })
+      item.classList.add('active')
+    })
+  })
+</script>
 {% endblock %}

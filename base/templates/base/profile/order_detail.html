@@ -11,11 +11,26 @@ Plantipie{% endblock %}
       <h5>Change Status</h5>
       <form action="" style="max-width: 400px" method="post">
         {% csrf_token %}
-        <select class="form-select" name="status" value="{{order.status}}">
+        <select class="form-select" name="status">
           <option value="" disabled>--Select--</option>
-          <option value="Pending">Pending</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cenceled">Cenceled</option>
+          <option
+            value="Pending"
+            {% if order.status == 'Pending' %}selected{% endif %}
+          >
+            Pending
+          </option>
+          <option
+            value="Delivered"
+            {% if order.status == 'Delivered' %}selected{% endif %}
+          >
+            Delivered
+          </option>
+          <option
+            value="Cenceled"
+            {% if order.status == 'Cenceled' %}selected{% endif %}
+          >
+            Cenceled
+          </option>
         </select>
         <button class="btn btn-sm btn-theme mt-3" type="submit">Update</button>
       </form>

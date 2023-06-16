@@ -5,33 +5,34 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import Product, Profile, AdditionalImage, Cart, Order, OrderProduct
 from django.contrib import messages
+from django.db.models.functions import Lower
+from django.core.paginator import Paginator
 from .utils.delete_file import delete_file
 from .utils.upload_file import upload_file
 
 # Create your views here.
 
 def homePage(request):
-    return render(request, 'base/home.html', {'range': range(1, 13),'curUser':""})
+    plants=Product.objects.all()
+    return render(request, 'base/home.html', {"plants":plants})
+
 
 def productPage(request):
-    return render(request, 'base/product.html', {'range': range(1, 13)})
+    plants=Product.objects.all()
+    context={'plants':plants}
+    # context=""
+    return render(request, 'base/product.html', context)
 
-def productDetailPage(request, id):
-    return render(request, 'base/product_detail.html', {'range': range(1, 5)})
-
-
-# def productPage(request):
-#     # plants=Plant.objects.all()
-#     # context={'plants':plants}
-#     context=""
-#     return render(request, 'base/product.html', context)
-
-# @login_required(login_url="/login/")
-# def productDetailPage(request, pk):
-#     context=""
-#     # plant=get_object_or_404(Plant,id=pk)
-#     # context={"plant":plant}
-#     return render(request, 'base/product_detail.html',context)
+@login_required(login_url="/login/")
+def productDetailPage(request, pk):
+    cart_quantity=0
+    cart=Cart.objects.filter(user=request.user, product__id=pk).first()
+    cart_quantity=cart.quantity if cart else 0
+    plant=Product.objects.get(id=pk)
+    recent_products = Product.objects.order_by('-created_at')[:4]
+    extraImages=AdditionalImage.objects.filter(product=plant)
+    context={"plant":plant,"extraImages":extraImages,"recent_products":recent_products, 'cart_quantity': cart_quantity}
+    return render(request, 'base/product_detail.html',context)
 
 @login_required(login_url="/login/")
 def checkoutPage(request):
@@ -100,6 +101,15 @@ def signupPage(request):
         username=request.POST.get("username")
         password=request.POST.get("password")
         # print(first_name, last_name, email, username, password)
+        if User.objects.filter(Q(username=username) & Q(email=email)).exists():
+            messages.error(request, "Username or email is already taken, provide different one")
+            return redirect("signup")
+        if User.objects.filter(username=username).exists():
+            messages.error(request,"Username is already taken, provide different one")
+            return redirect('signup')
+        if User.objects.filter(email=email).exists():
+            messages.error(request,"Email is already taken, provide different one")
+            return redirect('signup')
         my_user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
         profile = Profile.objects.create(user=my_user)
         profile.save()
@@ -150,24 +160,41 @@ def orderPage(request):
 @login_required(login_url="/login")
 def orderDetailPage(request, pk):
     order = Order.objects.get(id=pk)
-    context = {"order": order}
 
     if request.method == 'POST':
         status = request.POST.get('status')
-        print(status)
         order.status = status
         order.save()
         return redirect('order_detail', pk=pk)
-
+    
+    print(order.status)
+    context = {"order": order}
     return render(request, 'base/profile/order_detail.html', context)
 
 
 @login_required(login_url="/login/")
 def adminProductPage(request):
+    # if(request.method=="GET"):
+    #     print(request.GET["name"])
+    #     print(request.GET["email"])
     if(request.user.profile.role != "Seller"):
         return HttpResponse("You are not allowed to access this page")
-    plants=Product.objects.all()
-    context={'plants':plants}
+    if request.method=="POST":
+        search_query=request.POST.get('query')
+        plants=Product.objects.all()
+        if search_query:
+            plants=plants.annotate(lower_name=Lower('name')).filter(lower_name__icontains=search_query.lower())
+    else:
+        plants=Product.objects.all()
+    paginator=Paginator(plants,10)
+    page_number=request.GET.get('page')
+    plantsFinal=paginator.get_page(page_number)
+    totalPageNumber=plantsFinal.paginator.num_pages
+    context={
+        'plants':plantsFinal,
+        'lastpage':totalPageNumber,
+        'totalPageList':[n+1 for n in range(totalPageNumber)],
+        }
     return render(request, 'base/profile/product.html', context)
 
 @login_required(login_url="/login/")
@@ -236,16 +263,19 @@ def deleteProduct(request,pk):
     delete_file(str(plant.featured_image))
     additional_image=AdditionalImage.objects.filter(product=plant)
     for add_img in additional_image:
-        delete_file(str(add_img.image))
+        delete_file(str(add_img.image.path))
     plant.delete()
     return redirect('admin_product')
 
 @login_required(login_url="/login/")
 def addToCart(request,pk):
     quantity=1
-    if(request.method == "GET") :
+    new=False
+    if(request.method == "GET" and request.GET.get('quantity')) :
         quantity=int(request.GET.get('quantity'))
 
+    if(request.method == "GET" and request.GET.get('new')) :
+        new=True
     plant=Product.objects.get(id=pk)
 
     if(quantity == 0):
@@ -254,6 +284,8 @@ def addToCart(request,pk):
             plant.stock += cart.quantity
             plant.save()
             cart.delete()
+        if(request.GET.get("next")):
+            return redirect(request.GET.get("next"))
         return redirect('home')
 
     if(plant.stock < quantity):
@@ -264,9 +296,12 @@ def addToCart(request,pk):
     plant.save()
 
     obj, cart = Cart.objects.update_or_create(user=request.user, product=plant)
-    obj.quantity += quantity
+    if(not new):
+        obj.quantity += quantity
     if(obj.quantity == 0):
         obj.delete()
     else:
         obj.save()
+    if(request.GET.get("next")):
+        return redirect(request.GET.get("next"))
     return redirect('home')

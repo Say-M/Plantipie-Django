@@ -17,6 +17,7 @@ class Product(models.Model):
     def discount_price(self):
         return self.price - ((self.price * self.discount) / 100)
 
+
 class AdditionalImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to='assets/images')
