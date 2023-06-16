@@ -43,6 +43,8 @@
           <span>&#2547; {{plant.price}}</span>
         </div>
         <p>{{plant.description}}</p>
+        {% if plant.stock %}
+
         <div class="d-flex align-items-center gap-3">
           {% if cart_quantity %}
           <div class="quantity">
@@ -68,6 +70,7 @@
           </a>
           {% endif %}
         </div>
+        {% endif %}
       </div>
     </div>
   </div>

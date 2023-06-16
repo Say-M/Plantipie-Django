@@ -11,24 +11,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (cart_aside) {
     cartWrapper.classList.add('show')
+    document.body.append(overlayElement)
+    document.body.style.overflow = 'hidden'
   }
 
   cartBtn.addEventListener('click', () => {
     cartWrapper.classList.add('show')
+    document.body.append(overlayElement)
+    document.body.style.overflow = 'hidden'
   })
   cartCloseBtn.addEventListener('click', () => {
     cartWrapper.classList.remove('show')
+    overlayElement.remove()
+    document.body.style.overflow = ''
   })
   overlayElement.onclick = () => {
     cartWrapper.classList.remove('show')
+    overlayElement.remove()
+    document.body.style.overflow = ''
   }
-  cartWrapper.addEventListener('transitionend', () => {
-    if (cartWrapper.classList.contains('show')) {
-      document.body.append(overlayElement)
-      document.body.style.overflow = 'hidden'
-    } else {
-      overlayElement.remove()
-      document.body.style.overflow = ''
-    }
-  })
+  // cartWrapper.addEventListener('transitionend', () => {
+  //   if (cartWrapper.classList.contains('show')) {
+  //     document.body.append(overlayElement)
+  //     document.body.style.overflow = 'hidden'
+  //   } else {
+  //     overlayElement.remove()
+  //     document.body.style.overflow = ''
+  //   }
+  // })
 })

@@ -77,11 +77,15 @@
               >&#2547; {% load customer_filter %}
               {{cart.product.price|calculateDiscount:cart.product.discount}}</span
             >
+            {% if cart.product.stock %}
             <span class="available"
               >In Stock ({{cart.product.stock}}
               <!-- Divider -->
               Item{% if cart.product.stock > 1%}s{% endif %})
             </span>
+            {% else %}
+            <span class="unavailable">Out of Stock</span>
+            {% endif %}
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <div class="quantity">
@@ -91,11 +95,13 @@
                 <i class="fa-solid fa-minus"></i>
               </a>
               <span>{{cart.quantity}}</span>
+              {% if cart.product.stock %}
               <a
                 href="{% url 'addToCart' cart.product.id %}?quantity=+1&next={{request.path}}?cart_aside=true"
               >
                 <i class="fa-solid fa-plus"></i>
               </a>
+              {% endif %}
             </div>
             <h5 class="mb-0 fw-bold">&#2547; {{cart.total}}</h5>
           </div>

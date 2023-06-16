@@ -30,7 +30,9 @@ Plantipie{% endblock %}
                   >{{ order.status }}</span
                 >
               </td>
-              <td class="text-end align-middle">&#2547; 1000</td>
+              <td class="text-end align-middle">
+                &#2547; {{order.total|add:'80'}}
+              </td>
               <td class="align-middle align-middle">
                 <a
                   href="{% url 'order_detail' order.id %}"
