@@ -100,7 +100,15 @@
               </div>
               <h6>{{rec.name}}</h6>
               <div class="other">
-                <span><i class="fa-solid fa-shopping-cart"></i></span>
+                {% if rec.stock %}
+                <span class="available"
+                  >In Stock ({{rec.stock}}
+                  <!-- Divider -->
+                  Item{% if rec.stock > 1%}s{% endif %})
+                </span>
+                {% else %}
+                <span class="unavailable">Out of Stock</span>
+                {% endif %}
               </div>
             </div>
           </a>

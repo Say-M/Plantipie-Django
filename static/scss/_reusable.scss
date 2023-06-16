@@ -47,27 +47,8 @@
       margin-bottom: 1rem;
     }
     .other {
-      @include flex(space-between, center);
       span {
         font-size: 0.875rem;
-        height: 2rem;
-        line-height: 2rem;
-        &:first-child {
-          background-color: $yellow;
-          color: $white;
-          padding: 0 1rem;
-          border-radius: 5rem;
-        }
-        &:last-child {
-          background-color: $primary;
-          color: $white;
-          padding: 0 1rem;
-          border-radius: 5rem;
-          transition: background-color 0.15s ease-in-out;
-          &:hover {
-            background-color: darken($color: $primary, $amount: 10%);
-          }
-        }
       }
     }
   }

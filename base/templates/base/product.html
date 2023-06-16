@@ -30,9 +30,14 @@
               </div>
               <h6>{{i.name}}</h6>
               <div class="other">
-                <!--update the 'i' below with product id pls-->
                 {% if i.stock %}
-                <span><i class="fa-solid fa-shopping-cart"></i></span>
+                <span class="available"
+                  >In Stock ({{i.stock}}
+                  <!-- Divider -->
+                  Item{% if i.stock > 1%}s{% endif %})
+                </span>
+                {% else %}
+                <span class="unavailable">Out of Stock</span>
                 {% endif %}
               </div>
             </div>
