@@ -14,7 +14,7 @@ from .utils.upload_file import upload_file
 # Create your views here.
 
 def homePage(request):
-    plants=Product.objects.all()
+    plants= Product.objects.all()
     return render(request, 'base/home.html', {"plants":plants})
 
 
@@ -123,7 +123,7 @@ def adminProductPage(request):
             plants=plants.annotate(lower_name=Lower('name')).filter(lower_name__icontains=search_query.lower())
     else:
         plants=Product.objects.all()
-    paginator=Paginator(plants,10)
+    paginator=Paginator(plants,1)
     page_number=request.GET.get('page')
     plantsFinal=paginator.get_page(page_number)
     totalPageNumber=plantsFinal.paginator.num_pages
