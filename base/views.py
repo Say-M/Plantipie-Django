@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.db.models import Q
 from .models import Product, Profile, AdditionalImage, Cart, Order, OrderProduct
 from django.contrib import messages
 from django.db.models.functions import Lower
